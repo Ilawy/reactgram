@@ -6,6 +6,7 @@ import { PBProvider } from "./hooks/pb.context";
 import Login from "./routes/Login";
 import { Toaster } from "sonner";
 import LoginGuard from "./components/LoginGuard";
+import Aside from "./components/Aside";
 
 function App() {
   return (
@@ -13,23 +14,28 @@ function App() {
       <Toaster position="top-center" richColors />
       <PBProvider>
         <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route
-              path="/profile"
-              element={
-                <LoginGuard>
-                  <Profile mode="self" />
-                </LoginGuard>
-              }
-            />
-            <Route
-              path="/u/:id"
-              element={<Profile mode="user" />}
-            />
-            <Route path="/login" element={<Login />} />
-          </Routes>
-          <Dock />
+          <main className="grid grid-cols-4">
+            <Aside />
+            <article className="col-span-2">
+              <Routes>
+                <Route path="/" element={<Index />} />
+                <Route
+                  path="/profile"
+                  element={
+                    <LoginGuard>
+                      <Profile mode="self" />
+                    </LoginGuard>
+                  }
+                />
+                <Route
+                  path="/u/:id"
+                  element={<Profile mode="user" />}
+                />
+                <Route path="/login" element={<Login />} />
+              </Routes>
+              <Dock />
+            </article>
+          </main>
         </BrowserRouter>
       </PBProvider>
     </>

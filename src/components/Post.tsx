@@ -1,21 +1,19 @@
 import { Bookmark, ThumbsUp } from "lucide-react";
-import { AnimatePresence, motion } from "motion/react";
-import { useState } from "react";
-import {
-    FeedResponse,
-    PostsResponse,
-    UsersRecord,
-} from "../types/pocketbase-types";
+import { motion } from "motion/react";
+import { FeedResponse, UsersRecord } from "../types/pocketbase-types";
 import DOMPurify from "dompurify";
-import { DateTime } from 'luxon'
+import { DateTime } from "luxon";
 import pb from "../lib/pb";
+import { Link } from "react-router";
 
 interface PostProps {
     post: FeedResponse<number, { author: UsersRecord }>;
+    from: string;
+    viewAs?: string
 }
 
-export default function Post({ post }: PostProps) {
-    const [postExpanded, setPostExpanded] = useState(false);
+export default function Post({ post, from }: PostProps) {
+    // const [postExpanded, setPostExpanded] = useState(false);
     const protectedImageUrl = pb.files.getURL(post, post.image);
     const profileImageUrl = pb.files.getURL(
         post.expand!.author,
@@ -41,9 +39,11 @@ export default function Post({ post }: PostProps) {
                         alt=""
                     />
                     <motion.div className="flex flex-col gap-1">
-                        <motion.span layout className="font-bold">
-                            {post.expand?.author.name}
-                        </motion.span>
+                        <Link to={`/u/${post.author}`} state={{ from }}>
+                            <motion.span layout className="font-bold">
+                                {post.expand?.author.name}
+                            </motion.span>
+                        </Link>
                         <motion.span>
                             {DateTime.fromSQL(post.created).toRelative()}
                         </motion.span>

@@ -1,15 +1,9 @@
-import { Compass, Cone, Grid, Home, LogIn, Settings, User } from "lucide-react";
-import React, { useState } from "react";
+import { LogIn, User } from "lucide-react";
 import { Link, useLocation } from "react-router";
 import { useUser } from "../hooks/pb.context";
+import { DockItemProps, dockItems } from "../types/dockItems";
 
-interface DockItemProps {
-    icon: React.ReactNode;
-    label: string;
-    to: string;
-    isActive?: boolean;
-    scrollToTop?: boolean;
-}
+
 
 export function DockItem(
     { icon, label, to, isActive = false, scrollToTop = false }: DockItemProps,
@@ -42,24 +36,12 @@ export function DockItem(
     );
 }
 
-const items: DockItemProps[] = [{
-    to: "/",
-    icon: <Compass />,
-    label: "Explore",
-}, 
-// {
-//     to: "/feed",
-//     icon: <Cone style={{ rotate: "-90deg" }} />,
-//     label: "Feed",
-//     scrollToTop: true,
-// }
-];
 
 export default function Dock() {
     const userState = useUser();
     return (
-        <div className="dock">
-            {items.map((item) => (
+        <div className="dock md:hidden">
+            {dockItems.map((item) => (
                 <DockItem
                     to={item.to}
                     icon={item.icon}
