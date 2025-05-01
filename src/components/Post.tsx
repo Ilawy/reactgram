@@ -1,0 +1,87 @@
+import { Bookmark, ThumbsUp } from "lucide-react";
+import { AnimatePresence, motion } from "motion/react";
+import { useState } from "react";
+import {
+    FeedResponse,
+    PostsResponse,
+    UsersRecord,
+} from "../types/pocketbase-types";
+import DOMPurify from "dompurify";
+import { DateTime } from 'luxon'
+import pb from "../lib/pb";
+
+interface PostProps {
+    post: FeedResponse<number, { author: UsersRecord }>;
+}
+
+export default function Post({ post }: PostProps) {
+    const [postExpanded, setPostExpanded] = useState(false);
+    const protectedImageUrl = pb.files.getURL(post, post.image);
+    const profileImageUrl = pb.files.getURL(
+        post.expand!.author,
+        post.expand!.author!.avatar!,
+    );
+
+    return (
+        <motion.div
+            layout
+            className="w-full p-3 bg-base-100 border border-base-200 rounded-2xl flex flex-col gap-4 shadow-1xl"
+        >
+            <motion.div
+                layout
+                className="flex items-center justify-between gap-3 my-3"
+            >
+                {/* upper row */}
+                <motion.div layout className="flex items-center gap-3">
+                    {/* details */}
+                    <motion.img
+                        layout
+                        src={profileImageUrl}
+                        className="rounded-full w-12 h-12"
+                        alt=""
+                    />
+                    <motion.div className="flex flex-col gap-1">
+                        <motion.span layout className="font-bold">
+                            {post.expand?.author.name}
+                        </motion.span>
+                        <motion.span>
+                            {DateTime.fromSQL(post.created).toRelative()}
+                        </motion.span>
+                    </motion.div>
+                </motion.div>
+                {
+                    /* <motion.div className="flex gap-3">
+                <button className="btn w-12 h-12">
+                    <Pen />
+                </button>
+                <button className="btn w-12 h-12">
+                    <Trash />
+                </button>
+            </motion.div> */
+                }
+            </motion.div>
+
+            <motion.img
+                layout
+                className="w-full object-contain rounded-3xl"
+                onLoad={(e) => e.currentTarget.classList.remove("skeleton")}
+                src={protectedImageUrl}
+            />
+            <motion.div className="flex items-center gap-3" layout>
+                {/* actions */}
+                <motion.button className="flex items-center gap-2">
+                    <ThumbsUp fill="#36e" stroke="#eee" />
+                    {post.likes}
+                </motion.button>
+                <Bookmark />
+            </motion.div>
+            <motion.p
+                layout
+                dangerouslySetInnerHTML={{
+                    __html: DOMPurify.sanitize(post.body),
+                }}
+            >
+            </motion.p>
+        </motion.div>
+    );
+}
