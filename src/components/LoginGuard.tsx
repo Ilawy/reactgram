@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router";
 import { useUser } from "../hooks/pb.context";
 import { PropsWithChildren } from "react";
+import Login from "../routes/Login";
 
 export default function LoginGuard({ children }: PropsWithChildren) {
     const { loading, user } = useUser();
@@ -12,7 +13,7 @@ export default function LoginGuard({ children }: PropsWithChildren) {
             </div>
         );
     } else if (!user) {
-        navigate("/login");
+        return <Login />
     } else {
         return children;
     }
