@@ -13,7 +13,7 @@ export default function LoginGuard({ children }: PropsWithChildren) {
             </div>
         );
     } else if (!user) {
-        return <Login />
+        return <Login />;
     } else {
         return children;
     }
