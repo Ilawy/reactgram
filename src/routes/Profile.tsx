@@ -1,5 +1,4 @@
 import { ArrowLeft, PenLine, Plus } from "lucide-react";
-import { motion } from "motion/react";
 import { useUser } from "../hooks/pb.context";
 import { Link, useLocation, useParams } from "react-router";
 import { useAsync } from "react-use";

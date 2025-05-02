@@ -7,6 +7,7 @@ import Login from "./routes/Login";
 import { Toaster } from "sonner";
 import LoginGuard from "./components/LoginGuard";
 import Aside from "./components/Aside";
+import Test from "./routes/test";
 
 function App() {
   return (
@@ -16,7 +17,7 @@ function App() {
         <BrowserRouter>
           <main className="grid grid-cols-4">
             <Aside />
-            <article className="col-span-2">
+            <article className="col-span-4 lg:col-span-2 mb-24">
               <Routes>
                 <Route path="/" element={<Index />} />
                 <Route
@@ -27,6 +28,7 @@ function App() {
                     </LoginGuard>
                   }
                 />
+                <Route path="/test" element={<Test />} />
                 <Route
                   path="/u/:id"
                   element={<Profile mode="user" />}

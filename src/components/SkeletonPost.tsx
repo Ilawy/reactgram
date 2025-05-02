@@ -8,23 +8,13 @@ import { Link } from "react-router";
 import { Ref } from "react";
 
 interface PostProps {
-    post: FeedResponse<number, { author: UsersRecord }>;
-    from: string;
-    viewAs?: string;
-    ref?: Ref<HTMLDivElement>
 }
 
-export default function Post({ post, from, ref }: PostProps) {
+export default function SkeletonPost() {
     // const [postExpanded, setPostExpanded] = useState(false);
-    const protectedImageUrl = pb.files.getURL(post, post.image);
-    const profileImageUrl = pb.files.getURL(
-        post.expand!.author,
-        post.expand!.author!.avatar!,
-    );
 
     return (
         <motion.div
-            ref={ref}
             layout
             className="w-full p-3 bg-base-100 border border-base-200 rounded-2xl flex flex-col gap-4 shadow-1xl"
         >
@@ -35,20 +25,11 @@ export default function Post({ post, from, ref }: PostProps) {
                 {/* upper row */}
                 <motion.div layout className="flex items-center gap-3">
                     {/* details */}
-                    <motion.img
-                        layout
-                        src={profileImageUrl}
-                        className="rounded-full w-12 h-12"
-                        alt=""
-                    />
+                    <div className="skeleton rounded-full w-12 h-12" />
                     <motion.div className="flex flex-col gap-1">
-                        <Link to={`/u/${post.author}`} state={{ from }}>
-                            <motion.span layout className="font-bold">
-                                {post.expand?.author.name}
-                            </motion.span>
-                        </Link>
+                        <div className="skeleton h-[1ch] w-12" />
                         <motion.span>
-                            {DateTime.fromSQL(post.created).toRelative()}
+                            <div className="skeleton h-[0.5ch] w-12" />
                         </motion.span>
                     </motion.div>
                 </motion.div>
@@ -64,24 +45,21 @@ export default function Post({ post, from, ref }: PostProps) {
                 }
             </motion.div>
 
-            <motion.img
-                layout
-                className="w-full object-contain rounded-3xl"
-                onLoad={(e) => e.currentTarget.classList.remove("skeleton")}
-                src={protectedImageUrl}
+            <div
+                className="w-full object-contain rounded-3xl skeleton w-full h-96"
             />
             <motion.div className="flex items-center gap-3" layout>
                 {/* actions */}
                 <motion.button className="flex items-center gap-2">
                     <ThumbsUp fill="#36e" stroke="#eee" />
-                    {post.likes}
+                    0
                 </motion.button>
                 <Bookmark />
             </motion.div>
             <motion.p
                 layout
                 dangerouslySetInnerHTML={{
-                    __html: DOMPurify.sanitize(post.body),
+                    __html: DOMPurify.sanitize(""),
                 }}
             >
             </motion.p>

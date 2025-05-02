@@ -2,8 +2,7 @@ import { LogIn, User } from "lucide-react";
 import { Link, useLocation } from "react-router";
 import { useUser } from "../hooks/pb.context";
 import { DockItemProps, dockItems } from "../types/dockItems";
-
-
+import { motion } from "motion/react";
 
 export function DockItem(
     { icon, label, to, isActive = false, scrollToTop = false }: DockItemProps,
@@ -11,7 +10,7 @@ export function DockItem(
     const location = useLocation();
 
     return (
-        <button
+        <motion.button
             className={`${
                 isActive || location.pathname === to && "dock-active"
             }`}
@@ -32,10 +31,9 @@ export function DockItem(
                 {icon}
                 <span className="dock-label">{label}</span>
             </Link>
-        </button>
+        </motion.button>
     );
 }
-
 
 export default function Dock() {
     const userState = useUser();

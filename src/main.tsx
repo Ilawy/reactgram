@@ -5,8 +5,6 @@ import App from './App.tsx'
 import { RootComponent } from './components/demo.tsx'
 
 createRoot(document.getElementById('root')!).render(
-  <StrictMode>
+  // <StrictMode>
     <App />
-    {/* <RootComponent /> */}
-  </StrictMode>,
 )
