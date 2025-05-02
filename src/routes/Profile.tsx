@@ -3,8 +3,14 @@ import { useUser } from "../hooks/pb.context";
 import { Link, useLocation, useParams } from "react-router";
 import { useAsync } from "react-use";
 import pb from "../lib/pb";
-import { ProfilesRecord } from "../types/pocketbase-types";
+import {
+  FeedResponse,
+  ProfilesRecord,
+  UsersRecord,
+} from "../types/pocketbase-types";
 import { ReactNode } from "react";
+import PBInfinite from "../components/PBInfinite";
+import Post from "../components/Post";
 
 interface ProfileProps {
   mode: "self" | "user";
@@ -13,7 +19,10 @@ interface ProfileProps {
 export default function Profile({ mode }: ProfileProps) {
   const { user } = useUser();
   const params = useParams();
+  console.log(mode);
+  
   const id = mode === "self" ? user!.id : params.id!;
+  const from = mode === "self" ? "/profile" : `/u/${id}`
   const { loading: profileLoading, value: profile } = useAsync(
     () => pb.collection("profiles").getOne<ProfilesRecord>(id),
     [user],
@@ -36,7 +45,7 @@ export default function Profile({ mode }: ProfileProps) {
   return (
     <>
       {(location.state && location.state.from) && (
-        <header className="p-3 bg-white flex items-center">
+        <header className="p-3 bg-white flex items-center m-4 rounded-xl">
           <Link to={location.state.from} className="px-3 py-1">
             <ArrowLeft />
           </Link>
@@ -93,6 +102,18 @@ export default function Profile({ mode }: ProfileProps) {
             <PenLine />
           </button>
         </div>
+      </div>
+      <div className="w-full flex items-center flex-col mx-auto gap-4  py-8 px-2">
+        <PBInfinite<FeedResponse<number, { author: UsersRecord }>>
+          collection="feed"
+          options={{
+            filter: `author='${id}'`,
+            expand: `author`,
+          }}
+        >
+          {({ items }) =>
+            items.map((item) => <Post from={from} key={item.id} post={item} />)}
+        </PBInfinite>
       </div>
     </>
   );
