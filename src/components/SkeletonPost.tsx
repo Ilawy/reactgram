@@ -1,14 +1,8 @@
 import { Bookmark, ThumbsUp } from "lucide-react";
 import { motion } from "motion/react";
-import { FeedResponse, UsersRecord } from "../types/pocketbase-types";
 import DOMPurify from "dompurify";
-import { DateTime } from "luxon";
-import pb from "../lib/pb";
-import { Link } from "react-router";
-import { Ref } from "react";
 
-interface PostProps {
-}
+
 
 export default function SkeletonPost() {
     // const [postExpanded, setPostExpanded] = useState(false);
@@ -46,7 +40,7 @@ export default function SkeletonPost() {
             </motion.div>
 
             <div
-                className="w-full object-contain rounded-3xl skeleton w-full h-96"
+                className="object-contain rounded-3xl skeleton w-full h-96"
             />
             <motion.div className="flex items-center gap-3" layout>
                 {/* actions */}

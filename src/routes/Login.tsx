@@ -1,10 +1,9 @@
 import { Link } from "react-router";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { useCallback } from "react";
 import { useAsyncFn } from "react-use";
 import { AnimatePresence, motion } from "motion/react";
 import pb from "../lib/pb";
-import { delay } from "@std/async";
 import { toast } from "sonner";
 import { useNavigate } from "react-router";
 interface ILogin {
@@ -22,7 +21,7 @@ async function login(data: ILogin, navigate: ReturnType<typeof useNavigate>) {
         toast.success("Welcome, back!");
         await navigate("/profile");
     } catch (error) {
-        toast.error(error.message);
+        toast.error((error as Error).message);
         throw error; // so it can be displayed in ui
     }
 }
