@@ -44,7 +44,7 @@ export default function Post({ post, from, ref }: PostProps) {
                     <motion.div className="flex flex-col gap-1">
                         <Link to={`/u/${post.author}`} state={{ from }}>
                             <motion.span layout className="font-bold">
-                                {post.expand?.author.name}
+                                {post.expand?.author?.name}
                             </motion.span>
                         </Link>
                         <motion.span>
