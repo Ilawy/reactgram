@@ -18,8 +18,8 @@ export default function Post({ post, from, ref }: PostProps) {
     // const [postExpanded, setPostExpanded] = useState(false);
     const protectedImageUrl = pb.files.getURL(post, post.image);
     const profileImageUrl = pb.files.getURL(
-        post.expand!.author,
-        post.expand!.author!.avatar!,
+        post.expand?.author,
+        post.expand?.author?.avatar!,
     );
 
     return (
