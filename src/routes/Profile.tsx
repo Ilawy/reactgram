@@ -18,9 +18,7 @@ interface ProfileProps {
 
 export default function Profile({ mode }: ProfileProps) {
   const { user } = useUser();
-  const params = useParams();
-  console.log(mode);
-  
+  const params = useParams();  
   const id = mode === "self" ? user!.id : params.id!;
   const from = mode === "self" ? "/profile" : `/u/${id}`
   const { loading: profileLoading, value: profile } = useAsync(

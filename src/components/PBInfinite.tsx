@@ -29,7 +29,6 @@ export default function PBInfinite<T extends {}>(
     const reachedEnd = items.length >= totalItems;
     const isFirstMount = useFirstMountState();
 
-    console.log("TOTAL PAGES", totalPage);
 
     const endRef = useRef<HTMLDivElement>(null);
     const isEndInView = useInView(endRef, {
@@ -51,8 +50,6 @@ export default function PBInfinite<T extends {}>(
 
     const fetchChunk = useCallback(async (page: number) => {
         try {
-            console.log("PAGE", page);
-
             setLoading(true);
             const result = await pb.collection(collection).getList<T>(
                 page,
