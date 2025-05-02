@@ -173,11 +173,11 @@
     },
     {
         "id": "_pb_users_auth_",
-        "listRule": "id = @request.auth.id || 1 = 1",
-        "viewRule": "id = @request.auth.id || 1 = 1",
+        "listRule": "id = @request.auth.id || @request.query.expand:isset = true",
+        "viewRule": "id = @request.auth.id || @request.query.expand:isset = true",
         "createRule": "",
-        "updateRule": "id = @request.auth.id",
-        "deleteRule": "id = @request.auth.id",
+        "updateRule": "id = @request.auth.id || @request.query.expand:isset = true",
+        "deleteRule": "id = @request.auth.id || @request.query.expand:isset = true",
         "name": "users",
         "type": "auth",
         "fields": [
@@ -938,7 +938,7 @@
         "id": "pbc_1125843985",
         "listRule": null,
         "viewRule": null,
-        "createRule": null,
+        "createRule": "@request.auth.id = author.id",
         "updateRule": null,
         "deleteRule": null,
         "name": "posts",
@@ -1051,7 +1051,7 @@
             },
             {
                 "hidden": false,
-                "id": "_clone_jGQd",
+                "id": "_clone_2rYR",
                 "maxSelect": 1,
                 "maxSize": 0,
                 "mimeTypes": [
@@ -1072,7 +1072,7 @@
                 "cascadeDelete": false,
                 "collectionId": "_pb_users_auth_",
                 "hidden": false,
-                "id": "_clone_l19d",
+                "id": "_clone_wWha",
                 "maxSelect": 1,
                 "minSelect": 0,
                 "name": "author",
@@ -1084,7 +1084,7 @@
             {
                 "convertURLs": false,
                 "hidden": false,
-                "id": "_clone_qcF5",
+                "id": "_clone_6jLa",
                 "maxSize": 0,
                 "name": "body",
                 "presentable": false,
@@ -1094,7 +1094,7 @@
             },
             {
                 "hidden": false,
-                "id": "_clone_TjBs",
+                "id": "_clone_oS7A",
                 "name": "created",
                 "onCreate": true,
                 "onUpdate": false,
@@ -1104,7 +1104,7 @@
             },
             {
                 "hidden": false,
-                "id": "_clone_zeWk",
+                "id": "_clone_0kS8",
                 "name": "updated",
                 "onCreate": true,
                 "onUpdate": true,
@@ -1154,7 +1154,7 @@
             {
                 "exceptDomains": null,
                 "hidden": false,
-                "id": "_clone_Jfav",
+                "id": "_clone_G4Ny",
                 "name": "email",
                 "onlyDomains": null,
                 "presentable": false,
@@ -1164,7 +1164,7 @@
             },
             {
                 "hidden": false,
-                "id": "_clone_hIAJ",
+                "id": "_clone_6lKM",
                 "maxSelect": 1,
                 "maxSize": 0,
                 "mimeTypes": [
@@ -1185,7 +1185,7 @@
             {
                 "autogeneratePattern": "",
                 "hidden": false,
-                "id": "_clone_wgWG",
+                "id": "_clone_aRPE",
                 "max": 255,
                 "min": 0,
                 "name": "name",
