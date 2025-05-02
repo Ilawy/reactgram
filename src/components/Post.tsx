@@ -11,7 +11,7 @@ interface PostProps {
     post: FeedResponse<number, { author: UsersRecord }>;
     from: string;
     viewAs?: string;
-    ref?: Ref<HTMLDivElement>
+    ref?: Ref<HTMLDivElement>;
 }
 
 export default function Post({ post, from, ref }: PostProps) {

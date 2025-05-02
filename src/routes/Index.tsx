@@ -17,12 +17,12 @@ export default function Index() {
         margin: `16px 0px`,
         initial: false,
     });
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
     function handleModalOpen() {
         if (user) modalRef.current!.showModal();
         else {
-            navigate("/login")
+            navigate("/login");
         }
     }
 

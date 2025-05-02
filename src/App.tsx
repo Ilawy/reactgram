@@ -9,37 +9,37 @@ import LoginGuard from "./components/LoginGuard";
 import Aside from "./components/Aside";
 
 function App() {
-  return (
-    <>
-      <Toaster position="top-center" richColors />
-      <PBProvider>
-        <BrowserRouter>
-          <main className="grid grid-cols-4">
-            <Aside />
-            <article className="col-span-4 lg:col-span-2 mb-24">
-              <Routes>
-                <Route path="/" element={<Index />} />
-                <Route
-                  path="/profile"
-                  element={
-                    <LoginGuard>
-                      <Profile mode="self" />
-                    </LoginGuard>
-                  }
-                />
-                <Route
-                  path="/u/:id"
-                  element={<Profile mode="user" />}
-                />
-                <Route path="/login" element={<Login />} />
-              </Routes>
-              <Dock />
-            </article>
-          </main>
-        </BrowserRouter>
-      </PBProvider>
-    </>
-  );
+    return (
+        <>
+            <Toaster position="top-center" richColors />
+            <PBProvider>
+                <BrowserRouter>
+                    <main className="grid grid-cols-4">
+                        <Aside />
+                        <article className="col-span-4 lg:col-span-2 mb-24">
+                            <Routes>
+                                <Route path="/" element={<Index />} />
+                                <Route
+                                    path="/profile"
+                                    element={
+                                        <LoginGuard>
+                                            <Profile mode="self" />
+                                        </LoginGuard>
+                                    }
+                                />
+                                <Route
+                                    path="/u/:id"
+                                    element={<Profile mode="user" />}
+                                />
+                                <Route path="/login" element={<Login />} />
+                            </Routes>
+                            <Dock />
+                        </article>
+                    </main>
+                </BrowserRouter>
+            </PBProvider>
+        </>
+    );
 }
 
 export default App;
