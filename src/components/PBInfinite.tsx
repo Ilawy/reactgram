@@ -76,13 +76,12 @@ export default function PBInfinite<T extends {}>(
         };
     });
 
+    if((!items.length && !loading))return <span>No Posts Yet</span>
+    else if(!items.length && loading)return Array.from({ length: 6 }).map(() => <SkeletonPost />)
+
     return (
         <>
-            {items.length ? children({ items }) : (
-                <>
-                    {Array.from({ length: 6 }).map(() => <SkeletonPost />)}
-                </>
-            )}
+            {(items.length) ? children({ items }) : null}
             <div ref={endRef}>
                 {error && (
                     <div role="alert" className="alert alert-error">
