@@ -2,7 +2,7 @@ import { RecordListOptions } from "pocketbase";
 import { CollectionRecords } from "../types/pocketbase-types";
 import { ReactNode, useCallback, useEffect, useRef, useState } from "react";
 import { useEffectOnce, useFirstMountState } from "react-use";
-import { useInView } from "motion/react";
+import { useInView } from "react-intersection-observer";
 import pb from "../lib/pb";
 import SkeletonPost from "./SkeletonPost";
 
@@ -29,10 +29,7 @@ export default function PBInfinite<T extends {}>(
     const reachedEnd = items.length >= totalItems;
     const isFirstMount = useFirstMountState();
 
-    const endRef = useRef<HTMLDivElement>(null);
-    const isEndInView = useInView(endRef, {
-        initial: false,
-    });
+    const { ref: endRef, inView: isEndInView } = useInView();
 
     useEffect(() => {
         if (
@@ -72,27 +69,38 @@ export default function PBInfinite<T extends {}>(
         };
     });
 
-    if ((!items.length && !loading)) return <span>No Posts Yet</span>;
-    else if (!items.length && loading) {
-        return Array.from({ length: 6 }).map(() => <SkeletonPost />);
-    }
+    // if  return ;
+    // else if  {
+    //     return ;
+    // }
 
     return (
         <>
-            {(items.length) ? children({ items }) : null}
-            <div ref={endRef}>
-                {error && (
-                    <div role="alert" className="alert alert-error">
-                        <span>Cannot retrieve more posts</span>
-                    </div>
+            {(!items.length && !loading)
+                ? <span>No Posts Yet</span>
+                : (!items.length && loading)
+                ? (Array.from({ length: 6 }).map((_, i) => (
+                    <SkeletonPost key={i} />
+                )))
+                : (
+                    <>
+                        {(items.length) ? children({ items }) : null}
+                        <div ref={endRef}>
+                            {error && (
+                                <div role="alert" className="alert alert-error">
+                                    <span>Cannot retrieve more posts</span>
+                                </div>
+                            )}
+                            {loading && (
+                                <div className="flex justify-center items-center p-3">
+                                    <span className="spinner"></span>
+                                </div>
+                            )}
+                            {reachedEnd ? "END" : "LOADING"}
+                        </div>
+
+                    </>
                 )}
-                {loading && (
-                    <div className="flex justify-center items-center p-3">
-                        <span className="spinner"></span>
-                    </div>
-                )}
-                {reachedEnd ? "END" : "LOADING"}
-            </div>
         </>
     );
 }

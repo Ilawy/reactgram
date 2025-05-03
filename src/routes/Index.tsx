@@ -1,18 +1,19 @@
 import { motion, useInView } from "motion/react";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import pb from "../lib/pb";
 import { FeedResponse, UsersRecord } from "../types/pocketbase-types";
 import { useUser } from "../hooks/pb.context";
 import { Plus } from "lucide-react";
 import { useForm } from "react-hook-form";
 import PBInfinite from "../components/PBInfinite";
-import Post from "../components/Post";
 import { useNavigate } from "react-router";
+import PostGroup from "../components/PostGroup";
 
 export default function Index() {
     const { user } = useUser();
     const newPostRef = useRef<HTMLDivElement>(null);
     const modalRef = useRef<HTMLDialogElement>(null);
+    const [likedPosts, setLikedPosts] = useState<string[]>([])
     const newPostInView = useInView(newPostRef, {
         margin: `16px 0px`,
         initial: false,
@@ -47,7 +48,6 @@ export default function Index() {
             </motion.button>
 
             <motion.div
-                style={{}}
                 className="w-full flex items-center flex-col mx-auto gap-4  py-8 px-2"
             >
                 <div
@@ -71,9 +71,7 @@ export default function Index() {
                         sort: "-created",
                     }}
                 >
-                    {({ items }) => (items.map((item) => {
-                        return <Post key={item.id} post={item} from="/" />;
-                    }))}
+                    {({items})=><PostGroup likedPosts={likedPosts} setLikedPosts={setLikedPosts} items={items} user={user} />}
                 </PBInfinite>
             </motion.div>
         </>

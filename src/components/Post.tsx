@@ -12,9 +12,10 @@ interface PostProps {
     from: string;
     viewAs?: string;
     ref?: Ref<HTMLDivElement>;
+    liked: boolean
 }
 
-export default function Post({ post, from, ref }: PostProps) {
+export default function Post({ post, from, ref, liked }: PostProps) {
     // const [postExpanded, setPostExpanded] = useState(false);
     const protectedImageUrl = pb.files.getURL(post, post.image);
     const profileImageUrl = pb.files.getURL(
@@ -73,7 +74,7 @@ export default function Post({ post, from, ref }: PostProps) {
             <motion.div className="flex items-center gap-3" layout>
                 {/* actions */}
                 <motion.button className="flex items-center gap-2">
-                    <ThumbsUp fill="#36e" stroke="#eee" />
+                    <ThumbsUp fill={liked ? "#36e" : "none"} stroke="#eee" />
                     {post.likes}
                 </motion.button>
                 <Bookmark />
