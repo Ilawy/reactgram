@@ -10,7 +10,7 @@
         "preview": "vite preview",
         "db:dev": "pocketbase serve --dev --dir .pb_data --http 0.0.0.0:8090",
         "db:typegen": "npx pocketbase-typegen --db ./.pb_data/data.db --out src/types/pocketbase-types.ts",
-        "pre-commit": "deno fmt -c deno.options.json ."
+        "pre-commit": "deno fmt -c deno.json ."
     },
     "dependencies": {
         "@std/async": "npm:@jsr/std__async@^1.0.12",

@@ -1,4 +1,4 @@
-import { ArrowLeft, PenLine, Plus } from "lucide-react";
+import { Annoyed, ArrowLeft, PenLine, Plus } from "lucide-react";
 import { useUser } from "../hooks/pb.context";
 import { Link, useLocation, useParams } from "react-router";
 import { useAsync } from "react-use";
@@ -20,12 +20,12 @@ interface ProfileProps {
 export default function Profile({ mode }: ProfileProps) {
     const { user } = useUser();
     const params = useParams();
-     const [likedPosts, setLikedPosts] = useState<
-            { post: string; id: string }[]
-        >([]);
+    const [likedPosts, setLikedPosts] = useState<
+        { post: string; id: string }[]
+    >([]);
     const id = mode === "self" ? user!.id : params.id!;
     const from = mode === "self" ? "/profile" : `/u/${id}`;
-    const { loading: profileLoading, value: profile } = useAsync(
+    const { loading: profileLoading, value: profile, error } = useAsync(
         () => pb.collection("profiles").getOne<ProfilesRecord>(id),
         [user],
     );
@@ -44,6 +44,17 @@ export default function Profile({ mode }: ProfileProps) {
         },
     ];
 
+    if(error)return (
+        <div className="flex flex-col p-3 items-center justify-center text-lg mt-16">
+            <Annoyed size={64} className="mb-8" />
+            <p>
+                This profile cannot be displayed
+            </p>
+            <p>
+                Retry to refresh the page or <a className="underline font-bold" href="/">go home</a>
+            </p>
+        </div>
+    )
     return (
         <>
             {(location.state && location.state.from) && (
@@ -120,14 +131,14 @@ export default function Profile({ mode }: ProfileProps) {
                         expand: `author`,
                     }}
                 >
-                   {({ items }) => (
-                                           <PostGroup
-                                               likedPosts={likedPosts}
-                                               setLikedPosts={setLikedPosts}
-                                               items={items}
-                                               user={user}
-                                           />
-                                       )}
+                    {({ items }) => (
+                        <PostGroup
+                            likedPosts={likedPosts}
+                            setLikedPosts={setLikedPosts}
+                            items={items}
+                            user={user}
+                        />
+                    )}
                 </PBInfinite>
             </div>
         </>

@@ -1,10 +1,11 @@
 import { RecordListOptions } from "pocketbase";
 import { CollectionRecords } from "../types/pocketbase-types";
-import { ReactNode, useCallback, useEffect, useRef, useState } from "react";
+import { ReactNode, useCallback, useEffect, useState } from "react";
 import { useEffectOnce, useFirstMountState } from "react-use";
 import { useInView } from "react-intersection-observer";
 import pb from "../lib/pb";
 import SkeletonPost from "./SkeletonPost";
+import { X } from "lucide-react";
 
 interface CallbackProps<T> {
     items: T[];
@@ -56,6 +57,8 @@ export default function PBInfinite<T extends {}>(
             setTotalPages(result.totalPages);
             setItems((old) => [...old, ...result.items]);
         } catch (error) {
+            console.log(error);
+
             setError(error as Error);
         } finally {
             setLoading(false);
@@ -69,37 +72,42 @@ export default function PBInfinite<T extends {}>(
         };
     });
 
-    // if  return ;
-    // else if  {
-    //     return ;
-    // }
+    if (error) {
+        return (
+            <div className="w-full h-full">
+                <div role="alert" className="alert alert-error w-full h-full">
+                    <X />
+                    <span>
+                        Items cannot be retrieved, please refresh the page or
+                        <a
+                            className="mx-1 underline font-bold"
+                            href="mailto:next.mohammed.amr@gmail.com"
+                        >
+                            contact support
+                        </a>
+                    </span>
+                </div>
+            </div>
+        );
+    }
+    if (!items.length && !loading) return <span>No Posts Yet</span>;
+    else if (!items.length && loading) {
+        return (Array.from({ length: 6 }).map((_, i) => (
+            <SkeletonPost key={i} />
+        )));
+    }
 
     return (
         <>
-            {(!items.length && !loading)
-                ? <span>No Posts Yet</span>
-                : (!items.length && loading)
-                ? (Array.from({ length: 6 }).map((_, i) => (
-                    <SkeletonPost key={i} />
-                )))
-                : (
-                    <>
-                        {(items.length) ? children({ items }) : null}
-                        <div ref={endRef}>
-                            {error && (
-                                <div role="alert" className="alert alert-error">
-                                    <span>Cannot retrieve more posts</span>
-                                </div>
-                            )}
-                            {loading && (
-                                <div className="flex justify-center items-center p-3">
-                                    <span className="spinner"></span>
-                                </div>
-                            )}
-                            {reachedEnd ? "END" : "LOADING"}
-                        </div>
-                    </>
+            {(items.length) ? children({ items }) : null}
+            <div ref={endRef}>
+                {loading && (
+                    <div className="flex justify-center items-center p-3">
+                        <span className="spinner"></span>
+                    </div>
                 )}
+                {reachedEnd ? "END" : "LOADING"}
+            </div>
         </>
     );
 }

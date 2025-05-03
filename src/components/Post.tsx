@@ -5,7 +5,7 @@ import DOMPurify from "dompurify";
 import { DateTime } from "luxon";
 import pb from "../lib/pb";
 import { Link, useNavigate } from "react-router";
-import { Ref } from "react";
+import { Ref, useState } from "react";
 import { useUser } from "../hooks/pb.context";
 import { toast } from "sonner";
 
@@ -19,6 +19,7 @@ interface PostProps {
 
 export default function Post({ post, from, ref, liked }: PostProps) {
     const { user } = useUser();
+    const [loading, setLoading] = useState(false)
     // const [postExpanded, setPostExpanded] = useState(false);
     const protectedImageUrl = pb.files.getURL(post, post.image);
     const profileImageUrl = pb.files.getURL(
@@ -39,13 +40,20 @@ export default function Post({ post, from, ref, liked }: PostProps) {
             });
             return;
         }
-        if (liked) {
-            pb.collection("likes").delete(liked);
-        } else {
-            pb.collection("likes").create({
-                post: post.id,
-                user: user.id,
-            });
+        try{
+            setLoading(true)
+            if (liked) {
+                pb.collection("likes").delete(liked);
+            } else {
+                pb.collection("likes").create({
+                    post: post.id,
+                    user: user.id,
+                });
+            }
+        }catch(error){
+            toast.error("Action cannot be done, please try again later")
+        }finally{
+            setLoading(false)
         }
     }
 
@@ -100,6 +108,7 @@ export default function Post({ post, from, ref, liked }: PostProps) {
             <motion.div className="flex items-center gap-3" layout>
                 {/* actions */}
                 <motion.button
+                    disabled={loading}
                     className="flex items-center gap-2"
                     onClick={toggleLike}
                 >

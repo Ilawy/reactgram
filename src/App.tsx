@@ -11,7 +11,7 @@ import Aside from "./components/Aside";
 function App() {
     return (
         <>
-            <Toaster position="top-center" richColors />
+            <Toaster position="top-center" richColors className="z-50" />
             <PBProvider>
                 <BrowserRouter>
                     <main className="grid grid-cols-4">
