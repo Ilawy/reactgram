@@ -13,7 +13,7 @@ export default function Index() {
     const { user } = useUser();
     const newPostRef = useRef<HTMLDivElement>(null);
     const modalRef = useRef<HTMLDialogElement>(null);
-    const [likedPosts, setLikedPosts] = useState<string[]>([])
+    const [likedPosts, setLikedPosts] = useState<string[]>([]);
     const newPostInView = useInView(newPostRef, {
         margin: `16px 0px`,
         initial: false,
@@ -47,9 +47,7 @@ export default function Index() {
                 <Plus />
             </motion.button>
 
-            <motion.div
-                className="w-full flex items-center flex-col mx-auto gap-4  py-8 px-2"
-            >
+            <motion.div className="w-full flex items-center flex-col mx-auto gap-4  py-8 px-2">
                 <div
                     ref={newPostRef}
                     className="w-full bg-base-100 p-4 m-3 rounded-2xl flex flex-col gap-3"
@@ -71,7 +69,14 @@ export default function Index() {
                         sort: "-created",
                     }}
                 >
-                    {({items})=><PostGroup likedPosts={likedPosts} setLikedPosts={setLikedPosts} items={items} user={user} />}
+                    {({ items }) => (
+                        <PostGroup
+                            likedPosts={likedPosts}
+                            setLikedPosts={setLikedPosts}
+                            items={items}
+                            user={user}
+                        />
+                    )}
                 </PBInfinite>
             </motion.div>
         </>

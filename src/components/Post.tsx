@@ -12,7 +12,7 @@ interface PostProps {
     from: string;
     viewAs?: string;
     ref?: Ref<HTMLDivElement>;
-    liked: boolean
+    liked: boolean;
 }
 
 export default function Post({ post, from, ref, liked }: PostProps) {

@@ -98,7 +98,6 @@ export default function PBInfinite<T extends {}>(
                             )}
                             {reachedEnd ? "END" : "LOADING"}
                         </div>
-
                     </>
                 )}
         </>
