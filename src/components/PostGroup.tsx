@@ -15,7 +15,7 @@ interface PostGroupProps {
         React.SetStateAction<{ post: string; id: string }[]>
     >;
     user: (RecordModel & ProfilesRecord) | null;
-    from: string
+    from: string;
 }
 
 export default function PostGroup(
