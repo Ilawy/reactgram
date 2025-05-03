@@ -4,24 +4,50 @@ import { FeedResponse, UsersRecord } from "../types/pocketbase-types";
 import DOMPurify from "dompurify";
 import { DateTime } from "luxon";
 import pb from "../lib/pb";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { Ref } from "react";
+import { useUser } from "../hooks/pb.context";
+import { toast } from "sonner";
 
 interface PostProps {
     post: FeedResponse<number, { author: UsersRecord }>;
     from: string;
     viewAs?: string;
     ref?: Ref<HTMLDivElement>;
-    liked: boolean;
+    liked?: string;
 }
 
 export default function Post({ post, from, ref, liked }: PostProps) {
+    const { user } = useUser();
     // const [postExpanded, setPostExpanded] = useState(false);
     const protectedImageUrl = pb.files.getURL(post, post.image);
     const profileImageUrl = pb.files.getURL(
         post.expand?.author,
         post.expand?.author?.avatar!,
     );
+    const navigate = useNavigate();
+
+    function toggleLike() {
+        if (!user) {
+            toast.info("Please login first to like a post", {
+                action: {
+                    label: "Login",
+                    onClick() {
+                        navigate(`/login?return=${from}`);
+                    },
+                },
+            });
+            return;
+        }
+        if (liked) {
+            pb.collection("likes").delete(liked);
+        } else {
+            pb.collection("likes").create({
+                post: post.id,
+                user: user.id,
+            });
+        }
+    }
 
     return (
         <motion.div
@@ -73,7 +99,10 @@ export default function Post({ post, from, ref, liked }: PostProps) {
             />
             <motion.div className="flex items-center gap-3" layout>
                 {/* actions */}
-                <motion.button className="flex items-center gap-2">
+                <motion.button
+                    className="flex items-center gap-2"
+                    onClick={toggleLike}
+                >
                     <ThumbsUp fill={liked ? "#36e" : "none"} stroke="#eee" />
                     {post.likes}
                 </motion.button>

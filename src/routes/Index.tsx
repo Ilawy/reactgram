@@ -13,7 +13,9 @@ export default function Index() {
     const { user } = useUser();
     const newPostRef = useRef<HTMLDivElement>(null);
     const modalRef = useRef<HTMLDialogElement>(null);
-    const [likedPosts, setLikedPosts] = useState<string[]>([]);
+    const [likedPosts, setLikedPosts] = useState<
+        { post: string; id: string }[]
+    >([]);
     const newPostInView = useInView(newPostRef, {
         margin: `16px 0px`,
         initial: false,
