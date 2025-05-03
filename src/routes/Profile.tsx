@@ -44,17 +44,20 @@ export default function Profile({ mode }: ProfileProps) {
         },
     ];
 
-    if(error)return (
-        <div className="flex flex-col p-3 items-center justify-center text-lg mt-16">
-            <Annoyed size={64} className="mb-8" />
-            <p>
-                This profile cannot be displayed
-            </p>
-            <p>
-                Retry to refresh the page or <a className="underline font-bold" href="/">go home</a>
-            </p>
-        </div>
-    )
+    if (error) {
+        return (
+            <div className="flex flex-col p-3 items-center justify-center text-lg mt-16">
+                <Annoyed size={64} className="mb-8" />
+                <p>
+                    This profile cannot be displayed
+                </p>
+                <p>
+                    Retry to refresh the page or{" "}
+                    <a className="underline font-bold" href="/">go home</a>
+                </p>
+            </div>
+        );
+    }
     return (
         <>
             {(location.state && location.state.from) && (

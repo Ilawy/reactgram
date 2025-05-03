@@ -124,7 +124,7 @@ function NewPostModal(
     };
 
     async function submit(data: INewPost) {
-        setLoading(true)
+        setLoading(true);
         const form = new FormData();
         form.set("image", data.image.item(0)!);
         form.set("body", data.body);
@@ -134,10 +134,10 @@ function NewPostModal(
             reset();
             ref.current!.close();
         } catch (error) {
-            toast.error((error as Error).message)
-            ref.current!.close()
-        }finally{
-            setLoading(false)
+            toast.error((error as Error).message);
+            ref.current!.close();
+        } finally {
+            setLoading(false);
         }
     }
     return (
@@ -201,7 +201,12 @@ function NewPostModal(
                         layout
                     >
                         <motion.span layout>Post</motion.span>
-                        {loading && <motion.span layout className="spinner loading loading-xs" />}
+                        {loading && (
+                            <motion.span
+                                layout
+                                className="spinner loading loading-xs"
+                            />
+                        )}
                     </motion.button>
                     <button
                         disabled={loading}
