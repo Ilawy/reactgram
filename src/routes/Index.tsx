@@ -78,6 +78,7 @@ export default function Index() {
                             setLikedPosts={setLikedPosts}
                             items={items}
                             user={user}
+                            from="/"
                         />
                     )}
                 </PBInfinite>

@@ -10,7 +10,6 @@ import {
 } from "../types/pocketbase-types";
 import { ReactNode, useState } from "react";
 import PBInfinite from "../components/PBInfinite";
-import Post from "../components/Post";
 import PostGroup from "../components/PostGroup";
 
 interface ProfileProps {
@@ -136,6 +135,7 @@ export default function Profile({ mode }: ProfileProps) {
                 >
                     {({ items }) => (
                         <PostGroup
+                            from={from}
                             likedPosts={likedPosts}
                             setLikedPosts={setLikedPosts}
                             items={items}

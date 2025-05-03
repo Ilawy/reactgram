@@ -15,10 +15,11 @@ interface PostGroupProps {
         React.SetStateAction<{ post: string; id: string }[]>
     >;
     user: (RecordModel & ProfilesRecord) | null;
+    from: string
 }
 
 export default function PostGroup(
-    { items, user, likedPosts, setLikedPosts }: PostGroupProps,
+    { items, user, likedPosts, setLikedPosts, from }: PostGroupProps,
 ) {
     //TODO: find a way to inform the post of the new likes count
     useEffect(() => {
@@ -55,7 +56,7 @@ export default function PostGroup(
                         liked={likedPosts.find((l) => l.post === item.id)?.id}
                         key={item.id}
                         post={item}
-                        from="/"
+                        from={from}
                     />
                 );
             })}
