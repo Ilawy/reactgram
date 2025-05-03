@@ -4,16 +4,18 @@ import { useUser } from "../hooks/pb.context";
 import { DockItemProps, dockItems } from "../types/dockItems";
 import { motion } from "motion/react";
 
-export function DockItem(
-    { icon, label, to, isActive = false, scrollToTop = false }: DockItemProps,
-) {
+export function DockItem({
+    icon,
+    label,
+    to,
+    isActive = false,
+    scrollToTop = false,
+}: DockItemProps) {
     const location = useLocation();
 
     return (
         <motion.button
-            className={`${
-                isActive || location.pathname === to && "dock-active"
-            }`}
+            className={`${isActive || (location.pathname === to && "dock-active")}`}
         >
             <Link
                 onClick={() => {

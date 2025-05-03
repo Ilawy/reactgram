@@ -8,11 +8,12 @@ export interface DockItemProps {
     scrollToTop?: boolean;
 }
 
-export const dockItems: DockItemProps[] = [{
-    to: "/",
-    icon: <Compass />,
-    label: "Explore",
-} // {
+export const dockItems: DockItemProps[] = [
+    {
+        to: "/",
+        icon: <Compass />,
+        label: "Explore",
+    }, // {
     //     to: "/feed",
     //     icon: <Cone style={{ rotate: "-90deg" }} />,
     //     label: "Feed",

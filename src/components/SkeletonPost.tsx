@@ -25,24 +25,21 @@ export default function SkeletonPost() {
                         </motion.span>
                     </motion.div>
                 </motion.div>
-                {
-                    /* <motion.div className="flex gap-3">
+                {/* <motion.div className="flex gap-3">
                 <button className="btn w-12 h-12">
                     <Pen />
                 </button>
                 <button className="btn w-12 h-12">
                     <Trash />
                 </button>
-            </motion.div> */
-                }
+            </motion.div> */}
             </motion.div>
 
             <div className="object-contain rounded-3xl skeleton w-full h-96" />
             <motion.div className="flex items-center gap-3" layout>
                 {/* actions */}
                 <motion.button className="flex items-center gap-2">
-                    <ThumbsUp fill="#36e" stroke="#eee" />
-                    0
+                    <ThumbsUp fill="#36e" stroke="#eee" />0
                 </motion.button>
                 <Bookmark />
             </motion.div>
@@ -51,8 +48,7 @@ export default function SkeletonPost() {
                 dangerouslySetInnerHTML={{
                     __html: DOMPurify.sanitize(""),
                 }}
-            >
-            </motion.p>
+            ></motion.p>
         </motion.div>
     );
 }

@@ -3,6 +3,7 @@
     themes: winter --default;
 }
 
-body, #root {
+body,
+#root {
     @apply min-h-[100svh] bg-base-300 flex flex-col;
 }

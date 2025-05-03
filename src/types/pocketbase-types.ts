@@ -25,8 +25,9 @@ export type RecordIdString = string;
 export type HTMLString = string;
 
 type ExpandType<T> = unknown extends T
-    ? T extends unknown ? { expand?: unknown }
-    : { expand: T }
+    ? T extends unknown
+        ? { expand?: unknown }
+        : { expand: T }
     : { expand: T };
 
 // System fields
@@ -154,40 +155,32 @@ export type UsersRecord = {
 
 // Response types include system fields and match responses from the PocketBase API
 export type AuthoriginsResponse<Texpand = unknown> =
-    & Required<AuthoriginsRecord>
-    & BaseSystemFields<Texpand>;
+    Required<AuthoriginsRecord> & BaseSystemFields<Texpand>;
 export type ExternalauthsResponse<Texpand = unknown> =
-    & Required<ExternalauthsRecord>
-    & BaseSystemFields<Texpand>;
-export type MfasResponse<Texpand = unknown> =
-    & Required<MfasRecord>
-    & BaseSystemFields<Texpand>;
-export type OtpsResponse<Texpand = unknown> =
-    & Required<OtpsRecord>
-    & BaseSystemFields<Texpand>;
-export type SuperusersResponse<Texpand = unknown> =
-    & Required<SuperusersRecord>
-    & AuthSystemFields<Texpand>;
-export type FeedResponse<Tlikes = unknown, Texpand = unknown> =
-    & Required<FeedRecord<Tlikes>>
-    & BaseSystemFields<Texpand>;
-export type FollowsResponse<Texpand = unknown> =
-    & Required<FollowsRecord>
-    & BaseSystemFields<Texpand>;
-export type LikesResponse<Texpand = unknown> =
-    & Required<LikesRecord>
-    & BaseSystemFields<Texpand>;
-export type PostsResponse<Texpand = unknown> =
-    & Required<PostsRecord>
-    & BaseSystemFields<Texpand>;
+    Required<ExternalauthsRecord> & BaseSystemFields<Texpand>;
+export type MfasResponse<Texpand = unknown> = Required<MfasRecord> &
+    BaseSystemFields<Texpand>;
+export type OtpsResponse<Texpand = unknown> = Required<OtpsRecord> &
+    BaseSystemFields<Texpand>;
+export type SuperusersResponse<Texpand = unknown> = Required<SuperusersRecord> &
+    AuthSystemFields<Texpand>;
+export type FeedResponse<Tlikes = unknown, Texpand = unknown> = Required<
+    FeedRecord<Tlikes>
+> &
+    BaseSystemFields<Texpand>;
+export type FollowsResponse<Texpand = unknown> = Required<FollowsRecord> &
+    BaseSystemFields<Texpand>;
+export type LikesResponse<Texpand = unknown> = Required<LikesRecord> &
+    BaseSystemFields<Texpand>;
+export type PostsResponse<Texpand = unknown> = Required<PostsRecord> &
+    BaseSystemFields<Texpand>;
 export type ProfilesResponse<
     Tfollowers = unknown,
     Tposts = unknown,
     Texpand = unknown,
 > = Required<ProfilesRecord<Tfollowers, Tposts>> & BaseSystemFields<Texpand>;
-export type UsersResponse<Texpand = unknown> =
-    & Required<UsersRecord>
-    & AuthSystemFields<Texpand>;
+export type UsersResponse<Texpand = unknown> = Required<UsersRecord> &
+    AuthSystemFields<Texpand>;
 
 // Types containing all Records and Responses, useful for creating typing helper functions
 

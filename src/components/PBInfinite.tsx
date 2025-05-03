@@ -18,9 +18,12 @@ interface PBInfiniteProps<T> {
     children: (props: CallbackProps<T>) => ReactNode;
 }
 
-export default function PBInfinite<T extends {}>(
-    { collection, options = {}, perPage = 10, children }: PBInfiniteProps<T>,
-) {
+export default function PBInfinite<T extends {}>({
+    collection,
+    options = {},
+    perPage = 10,
+    children,
+}: PBInfiniteProps<T>) {
     const [page, setPage] = useState(1);
     const [items, setItems] = useState<T[]>([]);
     const [loading, setLoading] = useState(true);
@@ -34,7 +37,9 @@ export default function PBInfinite<T extends {}>(
 
     useEffect(() => {
         if (
-            isEndInView && items.length > 0 && totalItems > items.length &&
+            isEndInView &&
+            items.length > 0 &&
+            totalItems > items.length &&
             page < totalPage &&
             !isFirstMount
         ) {
@@ -45,25 +50,26 @@ export default function PBInfinite<T extends {}>(
         }
     }, [isEndInView, items]);
 
-    const fetchChunk = useCallback(async (page: number) => {
-        try {
-            setLoading(true);
-            const result = await pb.collection(collection).getList<T>(
-                page,
-                perPage,
-                options,
-            );
-            setTotalItems(result.totalItems);
-            setTotalPages(result.totalPages);
-            setItems((old) => [...old, ...result.items]);
-        } catch (error) {
-            console.log(error);
+    const fetchChunk = useCallback(
+        async (page: number) => {
+            try {
+                setLoading(true);
+                const result = await pb
+                    .collection(collection)
+                    .getList<T>(page, perPage, options);
+                setTotalItems(result.totalItems);
+                setTotalPages(result.totalPages);
+                setItems((old) => [...old, ...result.items]);
+            } catch (error) {
+                console.log(error);
 
-            setError(error as Error);
-        } finally {
-            setLoading(false);
-        }
-    }, [page]);
+                setError(error as Error);
+            } finally {
+                setLoading(false);
+            }
+        },
+        [page],
+    );
 
     useEffectOnce(() => {
         fetchChunk(page);
@@ -92,14 +98,14 @@ export default function PBInfinite<T extends {}>(
     }
     if (!items.length && !loading) return <span>No Posts Yet</span>;
     else if (!items.length && loading) {
-        return (Array.from({ length: 6 }).map((_, i) => (
+        return Array.from({ length: 6 }).map((_, i) => (
             <SkeletonPost key={i} />
-        )));
+        ));
     }
 
     return (
         <>
-            {(items.length) ? children({ items }) : null}
+            {items.length ? children({ items }) : null}
             <div ref={endRef}>
                 {loading && (
                     <div className="flex justify-center items-center p-3">

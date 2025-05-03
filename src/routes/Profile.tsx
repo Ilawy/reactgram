@@ -24,7 +24,11 @@ export default function Profile({ mode }: ProfileProps) {
     >([]);
     const id = mode === "self" ? user!.id : params.id!;
     const from = mode === "self" ? "/profile" : `/u/${id}`;
-    const { loading: profileLoading, value: profile, error } = useAsync(
+    const {
+        loading: profileLoading,
+        value: profile,
+        error,
+    } = useAsync(
         () => pb.collection("profiles").getOne<ProfilesRecord>(id),
         [user],
     );
@@ -47,19 +51,19 @@ export default function Profile({ mode }: ProfileProps) {
         return (
             <div className="flex flex-col p-3 items-center justify-center text-lg mt-16">
                 <Annoyed size={64} className="mb-8" />
-                <p>
-                    This profile cannot be displayed
-                </p>
+                <p>This profile cannot be displayed</p>
                 <p>
                     Retry to refresh the page or{" "}
-                    <a className="underline font-bold" href="/">go home</a>
+                    <a className="underline font-bold" href="/">
+                        go home
+                    </a>
                 </p>
             </div>
         );
     }
     return (
         <>
-            {(location.state && location.state.from) && (
+            {location.state && location.state.from && (
                 <header className="p-3 bg-white flex items-center m-4 rounded-xl">
                     <Link to={location.state.from} className="px-3 py-1">
                         <ArrowLeft />
@@ -71,23 +75,17 @@ export default function Profile({ mode }: ProfileProps) {
                     {/* profile details */}
                     <div className="flex flex-col gap-3">
                         {/* profile pic and name */}
-                        {profile?.avatar
-                            ? (
-                                <img
-                                    src={pb.files.getURL(
-                                        profile,
-                                        profile.avatar,
-                                    )}
-                                    className="rounded-full w-24 h-24"
-                                    alt=""
-                                />
-                            )
-                            : (
-                                <div className="skeleton w-24 h-24 rounded-full relative">
-                                    <div className="absolute w-full h-full rounded-full bg-base-100/30">
-                                    </div>
-                                </div>
-                            )}
+                        {profile?.avatar ? (
+                            <img
+                                src={pb.files.getURL(profile, profile.avatar)}
+                                className="rounded-full w-24 h-24"
+                                alt=""
+                            />
+                        ) : (
+                            <div className="skeleton w-24 h-24 rounded-full relative">
+                                <div className="absolute w-full h-full rounded-full bg-base-100/30"></div>
+                            </div>
+                        )}
                         <span>
                             {profile?.name || (
                                 <div className="skeleton bg-base-300 h-5 w-48" />

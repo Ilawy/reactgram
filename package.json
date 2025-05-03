@@ -10,7 +10,7 @@
         "preview": "vite preview",
         "db:dev": "pocketbase serve --dev --dir .pb_data --http 0.0.0.0:8090",
         "db:typegen": "npx pocketbase-typegen --db ./.pb_data/data.db --out src/types/pocketbase-types.ts",
-        "pre-commit": "deno fmt -c deno.json ."
+        "pre-commit": "npx -y  prettier src/ --write"
     },
     "dependencies": {
         "@std/async": "npm:@jsr/std__async@^1.0.12",
@@ -34,7 +34,7 @@
     "devDependencies": {
         "@eslint/js": "^9.21.0",
         "@types/luxon": "^3.6.2",
-        "@types/react": "^19.0.10",
+        "@types/react": "^19.1.2",
         "@types/react-dom": "^19.0.4",
         "@vitejs/plugin-react-swc": "^3.8.0",
         "daisyui": "^5.0.28",

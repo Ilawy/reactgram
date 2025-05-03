@@ -10,7 +10,7 @@ export function useCollectionList(
     { page, perPage, ...options }: UseCollectionListOptions,
 ) {
     const result = useAsyncFn(() =>
-        pb.collection(collectionName).getList(page, perPage, options)
+        pb.collection(collectionName).getList(page, perPage, options),
     );
     return result;
 }
@@ -21,7 +21,7 @@ export function useCollectionRecord(
     options?: RecordListOptions,
 ) {
     const result = useAsyncFn(() =>
-        pb.collection(collectionName).getFirstListItem(filter, options)
+        pb.collection(collectionName).getFirstListItem(filter, options),
     );
 
     return result;

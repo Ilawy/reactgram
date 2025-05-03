@@ -41,7 +41,7 @@ export default function Index() {
                 animate={{
                     bottom: !newPostInView ? "10%" : "-10%",
                     transition: {
-                        bounce: 0.30,
+                        bounce: 0.3,
                         type: "spring",
                     },
                 }}
@@ -92,9 +92,11 @@ interface INewPost {
     image: FileList;
 }
 
-function NewPostModal(
-    { ref }: { ref: React.RefObject<HTMLDialogElement | null> },
-) {
+function NewPostModal({
+    ref,
+}: {
+    ref: React.RefObject<HTMLDialogElement | null>;
+}) {
     const { register, handleSubmit, reset, formState } = useForm<INewPost>();
     const [previewURL, setPreviewURL] = useState<null | string>(null);
     const [loading, setLoading] = useState(false);
@@ -112,17 +114,16 @@ function NewPostModal(
         fileInputRef.current!.click();
     }
 
-    const displayImagePreview: React.InputHTMLAttributes<
-        HTMLInputElement
-    >["onChange"] = (event) => {
-        const file = event.target.files?.item(0);
-        if (!file) {
-            setPreviewURL(null);
-            return;
-        }
-        const url = URL.createObjectURL(file);
-        setPreviewURL(url);
-    };
+    const displayImagePreview: React.InputHTMLAttributes<HTMLInputElement>["onChange"] =
+        (event) => {
+            const file = event.target.files?.item(0);
+            if (!file) {
+                setPreviewURL(null);
+                return;
+            }
+            const url = URL.createObjectURL(file);
+            setPreviewURL(url);
+        };
 
     async function submit(data: INewPost) {
         setLoading(true);
@@ -157,9 +158,7 @@ function NewPostModal(
                     </button>
                     <input
                         {...fileInputRegister}
-                        ref={(
-                            e,
-                        ) => {
+                        ref={(e) => {
                             fileInputRefSetter(e);
                             fileInputRef.current = e;
                         }}
@@ -189,8 +188,7 @@ function NewPostModal(
                         })}
                         className="textarea w-full"
                         placeholder="Write post here"
-                    >
-                    </textarea>
+                    ></textarea>
                     {formState.errors.body && (
                         <span className="text-error">
                             {formState.errors.body.message}

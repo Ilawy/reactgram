@@ -87,16 +87,14 @@ export default function Post({ post, from, ref, liked }: PostProps) {
                         </motion.span>
                     </motion.div>
                 </motion.div>
-                {
-                    /* <motion.div className="flex gap-3">
+                {/* <motion.div className="flex gap-3">
                 <button className="btn w-12 h-12">
                     <Pen />
                 </button>
                 <button className="btn w-12 h-12">
                     <Trash />
                 </button>
-            </motion.div> */
-                }
+            </motion.div> */}
             </motion.div>
 
             <motion.img
@@ -122,8 +120,7 @@ export default function Post({ post, from, ref, liked }: PostProps) {
                 dangerouslySetInnerHTML={{
                     __html: DOMPurify.sanitize(post.body),
                 }}
-            >
-            </motion.p>
+            ></motion.p>
         </motion.div>
     );
 }
