@@ -8,9 +8,10 @@ import {
     ProfilesRecord,
     UsersRecord,
 } from "../types/pocketbase-types";
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
 import PBInfinite from "../components/PBInfinite";
 import Post from "../components/Post";
+import PostGroup from "../components/PostGroup";
 
 interface ProfileProps {
     mode: "self" | "user";
@@ -19,6 +20,9 @@ interface ProfileProps {
 export default function Profile({ mode }: ProfileProps) {
     const { user } = useUser();
     const params = useParams();
+     const [likedPosts, setLikedPosts] = useState<
+            { post: string; id: string }[]
+        >([]);
     const id = mode === "self" ? user!.id : params.id!;
     const from = mode === "self" ? "/profile" : `/u/${id}`;
     const { loading: profileLoading, value: profile } = useAsync(
@@ -116,10 +120,14 @@ export default function Profile({ mode }: ProfileProps) {
                         expand: `author`,
                     }}
                 >
-                    {({ items }) =>
-                        items.map((item) => (
-                            <Post from={from} key={item.id} post={item} />
-                        ))}
+                   {({ items }) => (
+                                           <PostGroup
+                                               likedPosts={likedPosts}
+                                               setLikedPosts={setLikedPosts}
+                                               items={items}
+                                               user={user}
+                                           />
+                                       )}
                 </PBInfinite>
             </div>
         </>
