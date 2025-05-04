@@ -4,11 +4,12 @@ import pb from "../lib/pb";
 import { FeedResponse, UsersRecord } from "../types/pocketbase-types";
 import { useUser } from "../hooks/pb.context";
 import { Plus, UploadCloud } from "lucide-react";
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import PBInfinite from "../components/PBInfinite";
 import { useNavigate } from "react-router";
 import PostGroup from "../components/PostGroup";
 import { toast } from "sonner";
+import { ClientResponseError } from "pocketbase";
 
 export default function Index() {
     const { user } = useUser();
@@ -123,11 +124,9 @@ function NewPostModal({
             fineInputOnChange(event);
         };
 
-    async function submit(data: INewPost) {
+    const submit: SubmitHandler<INewPost> = async (data) => {
         setLoading(true);
         const form = new FormData();
-        console.log(data.image);
-
         form.set("image", data.image.item(0)!);
         form.set("body", data.body);
         form.set("author", user!.id);
@@ -136,12 +135,17 @@ function NewPostModal({
             // reset();
             ref.current!.close();
         } catch (error) {
+            if (error instanceof ClientResponseError && error.data.data) {
+                toast.error(
+                    <pre>{JSON.stringify(error.data.data, null, 2)}</pre>,
+                );
+            }
             toast.error((error as Error).message);
             ref.current!.close();
         } finally {
             setLoading(false);
         }
-    }
+    };
     return (
         <dialog id="my_modal_2" className="modal" ref={ref}>
             <form onSubmit={handleSubmit(submit)} className="modal-box">
@@ -162,6 +166,7 @@ function NewPostModal({
                             fileInputRefSetter(e);
                             fileInputRef.current = e;
                         }}
+                        accept="image/*"
                         type="file"
                         className="hidden"
                     />

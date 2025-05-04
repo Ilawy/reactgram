@@ -7,6 +7,7 @@ import Auth from "./routes/Auth";
 import { Toaster } from "sonner";
 import LoginGuard from "./components/LoginGuard";
 import Aside from "./components/Aside";
+import AuthWithProvider from "./routes/AuthWithProvider";
 
 function App() {
     return (
@@ -32,6 +33,10 @@ function App() {
                                     element={<Profile mode="user" />}
                                 />
                                 <Route path="/auth" element={<Auth />} />
+                                <Route
+                                    path="/auth/:provider"
+                                    element={<AuthWithProvider />}
+                                />
                             </Routes>
                             <Dock />
                         </article>
