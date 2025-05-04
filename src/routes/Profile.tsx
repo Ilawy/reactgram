@@ -1,4 +1,4 @@
-import { Annoyed, ArrowLeft, Plus } from "lucide-react";
+import { Annoyed, ArrowLeft, Pen, Plus } from "lucide-react";
 import { useUser } from "../hooks/pb.context";
 import { Link, useLocation, useParams } from "react-router";
 import { useAsync } from "react-use";
@@ -121,7 +121,8 @@ export default function Profile({ mode: initialMode }: ProfileProps) {
                     <button
                         disabled={loading}
                         className="btn btn-lg flex-1 btn-primary btn-soft">
-                        <Plus /> {mode === "self" ? "Edit Profile" : "Follow"}
+                        {mode === "self" ? <Pen /> : <Plus /> }
+                        {mode === "self" ? "Edit Profile" : "Follow"}
                     </button>
                 </div>
             </div>
