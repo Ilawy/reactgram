@@ -12,7 +12,6 @@ import {
     PropsWithChildren,
     ReactNode,
     Ref,
-    useEffect,
     useRef,
     useState,
 } from "react";
@@ -211,12 +210,6 @@ function ProfileEditDrawer({
 
 function ImageChanger({ user }: { user: AuthRecord & ProfilesRecord }) {
     const inputRef = useRef<HTMLInputElement>(null);
-    const [imageURL, setImageURL] = useState<null | string>(null);
-
-    useEffect(() => {
-        if (user.avatar) setImageURL(pb.files.getURL(user, user.avatar));
-    }, [user]);
-
     function handleImageClick() {
         inputRef.current?.click();
     }
@@ -242,11 +235,11 @@ function ImageChanger({ user }: { user: AuthRecord & ProfilesRecord }) {
             />
             <button
                 onClick={handleImageClick}
-                className="w-16 h-1/6 relative rounded-full overflow-hidden group">
-                {imageURL && (
+                className="w-16 h-16 relative rounded-full overflow-hidden group">
+                {user.avatar && (
                     <img
                         className="brightness-70 group-hover:brightness-70"
-                        src={imageURL}
+                        src={pb.files.getURL(user, user.avatar)}
                         alt=""
                     />
                 )}
