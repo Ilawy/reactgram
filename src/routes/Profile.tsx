@@ -194,7 +194,6 @@ function ProfileEditDrawer({
                 id="my-drawer"
                 type="checkbox"
                 className="drawer-toggle"
-                defaultChecked
             />
             <div className="drawer-content">{children}</div>
             <div className="drawer-side">
