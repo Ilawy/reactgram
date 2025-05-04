@@ -26,7 +26,9 @@ async function login(data: ILogin, navigate: ReturnType<typeof useNavigate>) {
             .collection("users")
             .authWithPassword(data.usernameOrEmail, data.password);
         toast.success("Welcome, back!");
-        await navigate("/profile");
+        const returnPath =
+            new URL(location.href).searchParams.get("return") || "/profile";        
+        await navigate(returnPath);
     } catch (error) {
         toast.error((error as Error).message);
         throw error; // so it can be displayed in ui

@@ -1,4 +1,4 @@
-import { Annoyed, ArrowLeft, PenLine, Plus } from "lucide-react";
+import { Annoyed, ArrowLeft, LogOut, PenLine, Plus } from "lucide-react";
 import { useUser } from "../hooks/pb.context";
 import { Link, useLocation, useParams } from "react-router";
 import { useAsync } from "react-use";
@@ -30,7 +30,7 @@ export default function Profile({ mode }: ProfileProps) {
         error,
     } = useAsync(
         () => pb.collection("profiles").getOne<ProfilesRecord>(id),
-        [user],
+        [user]
     );
     const location = useLocation();
 
@@ -63,13 +63,20 @@ export default function Profile({ mode }: ProfileProps) {
     }
     return (
         <>
-            {location.state && location.state.from && (
-                <header className="p-3 bg-white flex items-center m-4 rounded-xl">
-                    <Link to={location.state.from} className="px-3 py-1">
-                        <ArrowLeft />
-                    </Link>
-                </header>
-            )}
+            <header className="p-3 bg-white flex justify-between items-center m-4 rounded-xl empty:hidden">
+                <Link to={location?.state?.from || "/"} className="px-3 py-1">
+                    <ArrowLeft />
+                </Link>
+                {mode === "self" && (
+                    <div>
+                        <button
+                            className="btn btn-sm btn-soft btn-accent"
+                            onClick={() => pb.authStore.clear()}>
+                            Logout
+                        </button>
+                    </div>
+                )}
+            </header>
             <div className="flex flex-col gap-4">
                 <div className="flex items-center py-4 px-2">
                     {/* profile details */}
@@ -127,7 +134,7 @@ export default function Profile({ mode }: ProfileProps) {
                     options={{
                         filter: `author='${id}'`,
                         expand: `author`,
-                        sort: "-created"
+                        sort: "-created",
                     }}>
                     {({ items }) => (
                         <PostGroup
