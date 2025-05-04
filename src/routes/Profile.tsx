@@ -1,4 +1,4 @@
-import { Annoyed, ArrowLeft, LogOut, PenLine, Plus } from "lucide-react";
+import { Annoyed, ArrowLeft, PenLine, Plus } from "lucide-react";
 import { useUser } from "../hooks/pb.context";
 import { Link, useLocation, useParams } from "react-router";
 import { useAsync } from "react-use";
