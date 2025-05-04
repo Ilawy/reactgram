@@ -16,8 +16,7 @@ export default function Aside() {
                             `bg-base-100 flex gap-3 p-3 rounded-2xl cursor-pointer hover:bg-base-300 active:bg-base-200 transition border border-base-300 ${
                                 isActive && "border-4"
                             }`
-                        }
-                    >
+                        }>
                         {item.icon}
                         {item.label}
                     </NavLink>
@@ -29,8 +28,7 @@ export default function Aside() {
                             `bg-base-100 flex gap-3 p-3 rounded-2xl cursor-pointer hover:bg-base-300 active:bg-base-200 transition border border-base-300 ${
                                 isActive && "border-4"
                             }`
-                        }
-                    >
+                        }>
                         <User />
                         Profile
                     </NavLink>

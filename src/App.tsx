@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router";
 import Index from "./routes/Index";
 import Profile from "./routes/Profile";
 import { PBProvider } from "./hooks/pb.context";
-import Login from "./routes/Login";
+import Auth from "./routes/Auth";
 import { Toaster } from "sonner";
 import LoginGuard from "./components/LoginGuard";
 import Aside from "./components/Aside";
@@ -31,7 +31,7 @@ function App() {
                                     path="/u/:id"
                                     element={<Profile mode="user" />}
                                 />
-                                <Route path="/login" element={<Login />} />
+                                <Route path="/auth" element={<Auth />} />
                             </Routes>
                             <Dock />
                         </article>

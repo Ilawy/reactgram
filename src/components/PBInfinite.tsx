@@ -87,8 +87,7 @@ export default function PBInfinite<T extends {}>({
                         Items cannot be retrieved, please refresh the page or
                         <a
                             className="mx-1 underline font-bold"
-                            href="mailto:next.mohammed.amr@gmail.com"
-                        >
+                            href="mailto:next.mohammed.amr@gmail.com">
                             contact support
                         </a>
                     </span>

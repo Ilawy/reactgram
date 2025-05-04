@@ -15,8 +15,7 @@ export function DockItem({
 
     return (
         <motion.button
-            className={`${isActive || (location.pathname === to && "dock-active")}`}
-        >
+            className={`${isActive || (location.pathname === to && "dock-active")}`}>
             <Link
                 onClick={() => {
                     if (scrollToTop) {
@@ -28,8 +27,7 @@ export function DockItem({
                     }
                 }}
                 to={to}
-                className={"contents"}
-            >
+                className={"contents"}>
                 {icon}
                 <span className="dock-label">{label}</span>
             </Link>
@@ -61,7 +59,7 @@ export default function Dock() {
             )}
             {!userState.user && (
                 <DockItem
-                    to="/login"
+                    to="/auth"
                     icon={<LogIn />}
                     label="Login"
                     scrollToTop

@@ -11,8 +11,7 @@ function RedComponent() {
         <>
             <button
                 onClick={() => setCount(count + 1)}
-                className="btn btn-primary"
-            >
+                className="btn btn-primary">
                 {count}
             </button>
         </>

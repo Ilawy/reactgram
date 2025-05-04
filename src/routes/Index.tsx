@@ -26,7 +26,7 @@ export default function Index() {
     function handleModalOpen() {
         if (user) modalRef.current!.showModal();
         else {
-            navigate("/login");
+            navigate("/auth");
         }
     }
 
@@ -45,21 +45,18 @@ export default function Index() {
                         type: "spring",
                     },
                 }}
-                className={`fixed right-8 btn btn-xl btn-square rounded-full bg-primary text-primary-content`}
-            >
+                className={`fixed right-8 btn btn-xl btn-square rounded-full bg-primary text-primary-content`}>
                 <Plus />
             </motion.button>
 
             <motion.div className="w-full flex items-center flex-col mx-auto gap-4  py-8 px-2">
                 <div
                     ref={newPostRef}
-                    className="w-full bg-base-100 p-4 m-3 rounded-2xl flex flex-col gap-3"
-                >
+                    className="w-full bg-base-100 p-4 m-3 rounded-2xl flex flex-col gap-3">
                     <p>Share what matters</p>
                     <button
                         onClick={handleModalOpen}
-                        className="btn btn-lg py-4 p-3 rounded-xl flex items-center justify-between"
-                    >
+                        className="btn btn-lg py-4 p-3 rounded-xl flex items-center justify-between">
                         New Post
                         <Plus />
                     </button>
@@ -70,8 +67,7 @@ export default function Index() {
                     options={{
                         expand: "author",
                         sort: "-created",
-                    }}
-                >
+                    }}>
                     {({ items }) => (
                         <PostGroup
                             likedPosts={likedPosts}
@@ -97,17 +93,18 @@ function NewPostModal({
 }: {
     ref: React.RefObject<HTMLDialogElement | null>;
 }) {
-    const { register, handleSubmit, reset, formState } = useForm<INewPost>();
+    const { register, handleSubmit, formState } = useForm<INewPost>();
     const [previewURL, setPreviewURL] = useState<null | string>(null);
     const [loading, setLoading] = useState(false);
 
     const { user } = useUser();
-    const { ref: fileInputRefSetter, ...fileInputRegister } = register(
-        "image",
-        {
-            required: "Please select an image",
-        },
-    );
+    const {
+        ref: fileInputRefSetter,
+        onChange: fineInputOnChange,
+        ...fileInputRegister
+    } = register("image", {
+        required: "Please select an image",
+    });
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     function invokeFilePicker() {
@@ -123,17 +120,20 @@ function NewPostModal({
             }
             const url = URL.createObjectURL(file);
             setPreviewURL(url);
+            fineInputOnChange(event);
         };
 
     async function submit(data: INewPost) {
         setLoading(true);
         const form = new FormData();
+        console.log(data.image);
+
         form.set("image", data.image.item(0)!);
         form.set("body", data.body);
         form.set("author", user!.id);
         try {
             await pb.collection("posts").create(form);
-            reset();
+            // reset();
             ref.current!.close();
         } catch (error) {
             toast.error((error as Error).message);
@@ -151,18 +151,17 @@ function NewPostModal({
                         disabled={loading}
                         type="button"
                         className="btn"
-                        onClick={invokeFilePicker}
-                    >
+                        onClick={invokeFilePicker}>
                         <UploadCloud />
                         Pick image
                     </button>
                     <input
                         {...fileInputRegister}
+                        onChange={displayImagePreview}
                         ref={(e) => {
                             fileInputRefSetter(e);
                             fileInputRef.current = e;
                         }}
-                        onChange={displayImagePreview}
                         type="file"
                         className="hidden"
                     />
@@ -187,8 +186,7 @@ function NewPostModal({
                             },
                         })}
                         className="textarea w-full"
-                        placeholder="Write post here"
-                    ></textarea>
+                        placeholder="Write post here"></textarea>
                     {formState.errors.body && (
                         <span className="text-error">
                             {formState.errors.body.message}
@@ -197,8 +195,7 @@ function NewPostModal({
                     <motion.button
                         disabled={loading}
                         className="btn btn-primary btn-soft"
-                        layout
-                    >
+                        layout>
                         <motion.span layout>Post</motion.span>
                         {loading && (
                             <motion.span
@@ -210,8 +207,7 @@ function NewPostModal({
                     <button
                         disabled={loading}
                         form="_new_post_dialog_close"
-                        className="btn btn-outline btn-soft"
-                    >
+                        className="btn btn-outline btn-soft">
                         Cancel
                     </button>
                 </div>
@@ -219,8 +215,7 @@ function NewPostModal({
             <form
                 method="dialog"
                 id="_new_post_dialog_close"
-                className="modal-backdrop"
-            >
+                className="modal-backdrop">
                 <button>close</button>
             </form>
         </dialog>

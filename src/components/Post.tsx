@@ -34,7 +34,7 @@ export default function Post({ post, from, ref, liked }: PostProps) {
                 action: {
                     label: "Login",
                     onClick() {
-                        navigate(`/login?return=${from}`);
+                        navigate(`/auth?return=${from}`);
                     },
                 },
             });
@@ -61,12 +61,10 @@ export default function Post({ post, from, ref, liked }: PostProps) {
         <motion.div
             ref={ref}
             layout
-            className="w-full p-3 bg-base-100 border border-base-200 rounded-2xl flex flex-col gap-4 shadow-1xl"
-        >
+            className="w-full p-3 bg-base-100 border border-base-200 rounded-2xl flex flex-col gap-4 shadow-1xl">
             <motion.div
                 layout
-                className="flex items-center justify-between gap-3 my-3"
-            >
+                className="flex items-center justify-between gap-3 my-3">
                 {/* upper row */}
                 <motion.div layout className="flex items-center gap-3">
                     {/* details */}
@@ -108,8 +106,7 @@ export default function Post({ post, from, ref, liked }: PostProps) {
                 <motion.button
                     disabled={loading}
                     className="flex items-center gap-2"
-                    onClick={toggleLike}
-                >
+                    onClick={toggleLike}>
                     <ThumbsUp fill={liked ? "#36e" : "none"} stroke="#eee" />
                     {post.likes}
                 </motion.button>
@@ -119,8 +116,7 @@ export default function Post({ post, from, ref, liked }: PostProps) {
                 layout
                 dangerouslySetInnerHTML={{
                     __html: DOMPurify.sanitize(post.body),
-                }}
-            ></motion.p>
+                }}></motion.p>
         </motion.div>
     );
 }

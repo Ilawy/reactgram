@@ -1,6 +1,6 @@
 import { useUser } from "../hooks/pb.context";
 import { PropsWithChildren } from "react";
-import Login from "../routes/Login";
+import Auth from "../routes/Auth";
 
 export default function LoginGuard({ children }: PropsWithChildren) {
     const { loading, user } = useUser();
@@ -11,7 +11,7 @@ export default function LoginGuard({ children }: PropsWithChildren) {
             </div>
         );
     } else if (!user) {
-        return <Login />;
+        return <Auth />;
     } else {
         return children;
     }

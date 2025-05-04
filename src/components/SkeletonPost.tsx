@@ -8,12 +8,10 @@ export default function SkeletonPost() {
     return (
         <motion.div
             layout
-            className="w-full p-3 bg-base-100 border border-base-200 rounded-2xl flex flex-col gap-4 shadow-1xl"
-        >
+            className="w-full p-3 bg-base-100 border border-base-200 rounded-2xl flex flex-col gap-4 shadow-1xl">
             <motion.div
                 layout
-                className="flex items-center justify-between gap-3 my-3"
-            >
+                className="flex items-center justify-between gap-3 my-3">
                 {/* upper row */}
                 <motion.div layout className="flex items-center gap-3">
                     {/* details */}
@@ -47,8 +45,7 @@ export default function SkeletonPost() {
                 layout
                 dangerouslySetInnerHTML={{
                     __html: DOMPurify.sanitize(""),
-                }}
-            ></motion.p>
+                }}></motion.p>
         </motion.div>
     );
 }

@@ -111,14 +111,12 @@ export default function Profile({ mode }: ProfileProps) {
                 <div className="p-5 flex flex-wrap max-w-full gap-3">
                     <button
                         disabled={loading}
-                        className="btn btn-lg flex-1 btn-primary btn-soft"
-                    >
+                        className="btn btn-lg flex-1 btn-primary btn-soft">
                         <Plus /> Follow
                     </button>
                     <button
                         disabled={loading}
-                        className="btn btn-lg btn-primary btn-soft"
-                    >
+                        className="btn btn-lg btn-primary btn-soft">
                         <PenLine />
                     </button>
                 </div>
@@ -129,8 +127,7 @@ export default function Profile({ mode }: ProfileProps) {
                     options={{
                         filter: `author='${id}'`,
                         expand: `author`,
-                    }}
-                >
+                    }}>
                     {({ items }) => (
                         <PostGroup
                             from={from}
