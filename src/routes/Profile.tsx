@@ -127,6 +127,7 @@ export default function Profile({ mode }: ProfileProps) {
                     options={{
                         filter: `author='${id}'`,
                         expand: `author`,
+                        sort: "-created"
                     }}>
                     {({ items }) => (
                         <PostGroup
