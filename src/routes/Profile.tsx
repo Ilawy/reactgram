@@ -30,7 +30,7 @@ export default function Profile({ mode }: ProfileProps) {
         error,
     } = useAsync(
         () => pb.collection("profiles").getOne<ProfilesRecord>(id),
-        [user]
+        [user],
     );
     const location = useLocation();
 

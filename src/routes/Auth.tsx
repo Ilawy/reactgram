@@ -27,7 +27,7 @@ async function login(data: ILogin, navigate: ReturnType<typeof useNavigate>) {
             .authWithPassword(data.usernameOrEmail, data.password);
         toast.success("Welcome, back!");
         const returnPath =
-            new URL(location.href).searchParams.get("return") || "/profile";        
+            new URL(location.href).searchParams.get("return") || "/profile";
         await navigate(returnPath);
     } catch (error) {
         toast.error((error as Error).message);
