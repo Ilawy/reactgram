@@ -1,10 +1,4 @@
-import {
-    Annoyed,
-    ArrowLeft,
-    ArrowUpCircleIcon,
-    Pen,
-    Plus,
-} from "lucide-react";
+import { Annoyed, ArrowLeft, ArrowUpCircleIcon, Pen, Plus } from "lucide-react";
 import { useUser } from "../hooks/pb.context";
 import { Link, useLocation, useParams } from "react-router";
 import { useAsync } from "react-use";
