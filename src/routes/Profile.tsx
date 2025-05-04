@@ -8,16 +8,11 @@ import {
     ProfilesRecord,
     UsersRecord,
 } from "../types/pocketbase-types";
-import {
-    PropsWithChildren,
-    ReactNode,
-    Ref,
-    useRef,
-    useState,
-} from "react";
+import { PropsWithChildren, ReactNode, Ref, useRef, useState } from "react";
 import PBInfinite from "../components/PBInfinite";
 import PostGroup from "../components/PostGroup";
 import { AuthRecord } from "pocketbase";
+import { toast } from "sonner";
 
 interface ProfileProps {
     mode: "self" | "user";
@@ -213,14 +208,23 @@ function ImageChanger({ user }: { user: AuthRecord & ProfilesRecord }) {
     function handleImageClick() {
         inputRef.current?.click();
     }
+    const [loading, setLoading] = useState(false);
 
     async function handleImageChange() {
-        if (inputRef.current && inputRef.current.files?.length) {
-            const image = inputRef.current.files.item(0);
-            if (!image) return;
-            const form = new FormData();
-            form.set("avatar", image);
-            pb.collection("users").update(user.id, form);
+        try {
+            setLoading(true);
+            if (inputRef.current && inputRef.current.files?.length) {
+                const image = inputRef.current.files.item(0);
+                if (!image) return;
+                const form = new FormData();
+                form.set("avatar", image);
+                await pb.collection("users").update(user.id, form);
+                toast.success("Image updated successfully");
+            }
+        } catch (error) {
+            alert(error);
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -234,6 +238,7 @@ function ImageChanger({ user }: { user: AuthRecord & ProfilesRecord }) {
                 className="hidden"
             />
             <button
+                disabled={loading}
                 onClick={handleImageClick}
                 className="w-16 h-16 relative rounded-full overflow-hidden group">
                 {user.avatar && (
@@ -244,7 +249,11 @@ function ImageChanger({ user }: { user: AuthRecord & ProfilesRecord }) {
                     />
                 )}
                 <span className="absolute top-1/2 left-1/2 -translate-1/2 text-white">
-                    <ArrowUpCircleIcon />
+                    {loading ? (
+                        <span className="spinner loading"></span>
+                    ) : (
+                        <ArrowUpCircleIcon />
+                    )}
                 </span>
             </button>
         </>
