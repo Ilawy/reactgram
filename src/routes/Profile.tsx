@@ -121,7 +121,7 @@ export default function Profile({ mode: initialMode }: ProfileProps) {
                     <button
                         disabled={loading}
                         className="btn btn-lg flex-1 btn-primary btn-soft">
-                        {mode === "self" ? <Pen /> : <Plus /> }
+                        {mode === "self" ? <Pen /> : <Plus />}
                         {mode === "self" ? "Edit Profile" : "Follow"}
                     </button>
                 </div>
