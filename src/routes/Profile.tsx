@@ -1,4 +1,4 @@
-import { Annoyed, ArrowLeft, PenLine, Plus } from "lucide-react";
+import { Annoyed, ArrowLeft, Plus } from "lucide-react";
 import { useUser } from "../hooks/pb.context";
 import { Link, useLocation, useParams } from "react-router";
 import { useAsync } from "react-use";
@@ -16,12 +16,14 @@ interface ProfileProps {
     mode: "self" | "user";
 }
 
-export default function Profile({ mode }: ProfileProps) {
+export default function Profile({ mode: initialMode }: ProfileProps) {
     const { user } = useUser();
     const params = useParams();
     const [likedPosts, setLikedPosts] = useState<
         { post: string; id: string }[]
     >([]);
+    const mode: ProfileProps["mode"] =
+        user?.id === params?.id ? "self" : initialMode;
     const id = mode === "self" ? user!.id : params.id!;
     const from = mode === "self" ? "/profile" : `/u/${id}`;
     const {
@@ -119,12 +121,7 @@ export default function Profile({ mode }: ProfileProps) {
                     <button
                         disabled={loading}
                         className="btn btn-lg flex-1 btn-primary btn-soft">
-                        <Plus /> Follow
-                    </button>
-                    <button
-                        disabled={loading}
-                        className="btn btn-lg btn-primary btn-soft">
-                        <PenLine />
+                        <Plus /> {mode === "self" ? "Edit Profile" : "Follow"}
                     </button>
                 </div>
             </div>
