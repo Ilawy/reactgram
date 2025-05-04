@@ -15,7 +15,9 @@
     "dependencies": {
         "@std/async": "npm:@jsr/std__async@^1.0.12",
         "@tailwindcss/vite": "^4.1.4",
+        "@types/lodash": "^4.17.16",
         "dompurify": "^3.2.5",
+        "lodash": "^4.17.21",
         "lucide-react": "^0.503.0",
         "luxon": "^3.6.1",
         "motion": "^12.9.2",

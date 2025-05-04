@@ -1,7 +1,7 @@
 import { Annoyed, ArrowLeft, ArrowUpCircleIcon, Pen, Plus } from "lucide-react";
 import { useUser } from "../hooks/pb.context";
 import { Link, useLocation, useParams } from "react-router";
-import { useAsync } from "react-use";
+import { useAsync, useAsyncFn } from "react-use";
 import pb from "../lib/pb";
 import {
     FeedResponse,
@@ -13,6 +13,9 @@ import PBInfinite from "../components/PBInfinite";
 import PostGroup from "../components/PostGroup";
 import { AuthRecord } from "pocketbase";
 import { toast } from "sonner";
+import { useForm } from "react-hook-form";
+import { getUpdatedObject } from "../lib/utils";
+import { pick } from "lodash";
 
 interface ProfileProps {
     mode: "self" | "user";
@@ -34,7 +37,7 @@ export default function Profile({ mode: initialMode }: ProfileProps) {
         error,
     } = useAsync(
         () => pb.collection("profiles").getOne<ProfilesRecord>(id),
-        [user],
+        [user]
     );
     const location = useLocation();
 
@@ -93,7 +96,7 @@ export default function Profile({ mode: initialMode }: ProfileProps) {
                                 <img
                                     src={pb.files.getURL(
                                         profile,
-                                        profile.avatar,
+                                        profile.avatar
                                     )}
                                     className="rounded-full w-24 h-24"
                                     alt=""
@@ -197,9 +200,66 @@ function ProfileEditDrawer({
                     className="drawer-overlay"></label>
                 <div className="menu bg-base-200 text-base-content min-h-full w-80 p-4">
                     <ImageChanger user={user} />
+                    <DetailsChanger user={user} />
                 </div>
             </div>
         </div>
+    );
+}
+
+interface IChangableDetails {
+    name: string;
+}
+
+function DetailsChanger({ user }: { user: AuthRecord & ProfilesRecord }) {
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm<IChangableDetails>();
+    const [{ loading }, updateDetails] = useAsyncFn(
+        (data: Partial<IChangableDetails>) =>
+            pb.collection("users").update(user.id, data)
+    );
+
+    async function submit(data: IChangableDetails) {
+        const updatedOnlyValues = getUpdatedObject<IChangableDetails>(
+            pick(user, ["name"]),
+            data
+        );
+        if (!Object.keys(updatedOnlyValues).length) {
+            toast.error("No values are updated");
+            return;
+        }
+        try {
+            await updateDetails(updatedOnlyValues);
+            toast.success("Profile updated successfully")
+        } catch (error) {
+            toast.error((error as Error).message);
+        }
+    }
+
+    return (
+        <>
+            <form onSubmit={handleSubmit(submit)} action="">
+                <fieldset className="fieldset">
+                    <legend className="fieldset-legend">Name *</legend>
+                    <input
+                        type="text"
+                        className="input"
+                        placeholder="Name"
+                        defaultValue={user.name}
+                        {...register("name", { required: true })}
+                    />
+                    <p className="label">{errors.name?.message}</p>
+                </fieldset>
+
+                <button className="btn btn-primary">
+                    Update
+                    {loading && <span className="loading spinner loading-xs" />}
+                </button>
+            </form>
+        </>
     );
 }
 
