@@ -784,11 +784,11 @@
     },
     {
         "id": "pbc_3660641689",
-        "listRule": null,
-        "viewRule": null,
-        "createRule": null,
+        "listRule": "@request.auth.id = followee.id || @request.auth.id = follower.id",
+        "viewRule": "@request.auth.id = followee.id || @request.auth.id = follower.id",
+        "createRule": "@request.auth.id = follower.id",
         "updateRule": null,
-        "deleteRule": null,
+        "deleteRule": "@request.auth.id = follower.id",
         "name": "follows",
         "type": "base",
         "fields": [
@@ -854,7 +854,7 @@
             }
         ],
         "indexes": [
-            "CREATE INDEX `idx_fu3uLIXxet` ON `follows` (\n  `follower`,\n  `followee`\n)"
+            "CREATE UNIQUE INDEX `idx_fu3uLIXxet` ON `follows` (\n  `follower`,\n  `followee`\n)"
         ],
         "system": false
     },
