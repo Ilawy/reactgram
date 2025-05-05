@@ -1,17 +1,31 @@
-import { Annoyed, ArrowLeft, ArrowUpCircleIcon, Pen, Plus } from "lucide-react";
+import {
+    Annoyed,
+    ArrowLeft,
+    ArrowUpCircleIcon,
+    Pen,
+    UserMinus,
+    UserPlus,
+} from "lucide-react";
 import { useUser } from "../hooks/pb.context";
 import { Link, useLocation, useParams } from "react-router";
-import { useAsync, useAsyncFn } from "react-use";
+import { useAsyncFn } from "react-use";
 import pb from "../lib/pb";
 import {
     FeedResponse,
     ProfilesRecord,
     UsersRecord,
 } from "../types/pocketbase-types";
-import { PropsWithChildren, ReactNode, Ref, useRef, useState } from "react";
+import {
+    PropsWithChildren,
+    ReactNode,
+    Ref,
+    useEffect,
+    useRef,
+    useState,
+} from "react";
 import PBInfinite from "../components/PBInfinite";
 import PostGroup from "../components/PostGroup";
-import { AuthRecord } from "pocketbase";
+import { AuthRecord, ClientResponseError } from "pocketbase";
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import { getUpdatedObject } from "../lib/utils";
@@ -21,8 +35,27 @@ interface ProfileProps {
     mode: "self" | "user";
 }
 
+async function unfollow(id: string) {
+    return pb.collection("follows").delete(id);
+}
+
+async function getFollowRelationId(
+    follower: string | undefined,
+    following: string | undefined,
+) {
+    return pb
+        .collection("follows")
+        .getFirstListItem(`follower='${follower}' && followee='${following}'`)
+        .catch((e) =>
+            e instanceof ClientResponseError && e.status === 404
+                ? null
+                : Promise.reject(e),
+        )
+        .then((v) => v?.id);
+}
+
 export default function Profile({ mode: initialMode }: ProfileProps) {
-    const { user } = useUser();
+    const { user, loading: userLoading } = useUser();
     const params = useParams();
     const [likedPosts, setLikedPosts] = useState<
         { post: string; id: string }[]
@@ -31,17 +64,53 @@ export default function Profile({ mode: initialMode }: ProfileProps) {
         user?.id === params?.id ? "self" : initialMode;
     const id = mode === "self" ? user!.id : params.id!;
     const from = mode === "self" ? "/profile" : `/u/${id}`;
-    const {
-        loading: profileLoading,
-        value: profile,
-        error,
-    } = useAsync(
-        () => pb.collection("profiles").getOne<ProfilesRecord>(id),
-        [user],
-    );
+    const [{ loading: profileLoading, value: profile, error }, fetchProfile] =
+        useAsyncFn(
+            () => pb.collection("profiles").getOne<ProfilesRecord>(id),
+            [user],
+        );
+
+    const [{ loading: unfollowLoading }, doUnfollow] = useAsyncFn(unfollow);
+
+    const [
+        {
+            loading: followingLoading,
+            value: followRelation,
+        },
+        fetchFollowRelationId,
+    ] = useAsyncFn(getFollowRelationId, [user, profile]);
+
+    useEffect(() => {
+        fetchProfile();
+    }, []);
+
+    useEffect(() => {
+        fetchFollowRelationId(user?.id, profile?.id);
+    }, [user, profile]);
+
+    const toggleFollowing = async () => {
+        if (!user || !profile) {
+            //TODO: required login
+            return;
+        }
+        if (followRelation) {
+            await doUnfollow(followRelation);
+            await fetchFollowRelationId(user?.id, profile?.id);
+            await fetchProfile();
+        } else {
+            await pb.collection("follows").create({
+                followee: profile!.id,
+                follower: user.id,
+            });
+            await fetchFollowRelationId(user?.id, profile?.id);
+            await fetchProfile();
+        }
+    };
+
     const location = useLocation();
 
-    const loading = profileLoading;
+    const actionsLoading =
+        profileLoading && userLoading && (followingLoading || unfollowLoading);
 
     const stats = [
         {
@@ -131,9 +200,19 @@ export default function Profile({ mode: initialMode }: ProfileProps) {
                     <div className="p-5 flex flex-wrap max-w-full gap-3">
                         {mode === "user" && (
                             <button
-                                disabled={loading}
+                                onClick={toggleFollowing}
+                                disabled={actionsLoading}
                                 className="btn btn-lg flex-1 btn-primary btn-soft">
-                                <Plus /> Follow
+                                {followRelation ? (
+                                    <>
+                                        <UserMinus />
+                                        Unfollow
+                                    </>
+                                ) : (
+                                    <>
+                                        <UserPlus /> Follow
+                                    </>
+                                )}
                             </button>
                         )}
                         {mode === "self" && (
