@@ -57,9 +57,6 @@ async function getFollowRelationId(
 export default function Profile({ mode: initialMode }: ProfileProps) {
     const { user, loading: userLoading } = useUser();
     const params = useParams();
-    const [likedPosts, setLikedPosts] = useState<
-        { post: string; id: string }[]
-    >([]);
     const mode: ProfileProps["mode"] =
         user?.id === params?.id ? "self" : initialMode;
     const id = mode === "self" ? user!.id : params.id!;
@@ -230,13 +227,7 @@ export default function Profile({ mode: initialMode }: ProfileProps) {
                             sort: "-created",
                         }}>
                         {({ items }) => (
-                            <PostGroup
-                                from={from}
-                                likedPosts={likedPosts}
-                                setLikedPosts={setLikedPosts}
-                                items={items}
-                                user={user}
-                            />
+                            <PostGroup from={from} items={items} user={user} />
                         )}
                     </PBInfinite>
                 </div>

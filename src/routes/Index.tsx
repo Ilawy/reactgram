@@ -1,7 +1,10 @@
 import { motion, useInView } from "motion/react";
 import { useRef, useState } from "react";
 import pb from "../lib/pb";
-import { FeedResponse, UsersRecord } from "../types/pocketbase-types";
+import {
+    FeedResponse,
+    UsersRecord,
+} from "../types/pocketbase-types";
 import { useUser } from "../hooks/pb.context";
 import { Plus, UploadCloud } from "lucide-react";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -15,9 +18,6 @@ export default function Index() {
     const { user } = useUser();
     const newPostRef = useRef<HTMLDivElement>(null);
     const modalRef = useRef<HTMLDialogElement>(null);
-    const [likedPosts, setLikedPosts] = useState<
-        { post: string; id: string }[]
-    >([]);
     const newPostInView = useInView(newPostRef, {
         margin: `16px 0px`,
         initial: false,
@@ -71,8 +71,8 @@ export default function Index() {
                     }}>
                     {({ items }) => (
                         <PostGroup
-                            likedPosts={likedPosts}
-                            setLikedPosts={setLikedPosts}
+                            // likedPosts={likedPosts}
+                            // setLikedPosts={setLikedPosts}
                             items={items}
                             user={user}
                             from="/"
@@ -89,11 +89,12 @@ interface INewPost {
     image: FileList;
 }
 
-function NewPostModal({
-    ref,
-}: {
+interface NewPostProps {
     ref: React.RefObject<HTMLDialogElement | null>;
-}) {
+    // insertNewPost(post: PostsResponse): void | Promise<void>
+}
+
+function NewPostModal({ ref }: NewPostProps) {
     const { register, handleSubmit, formState } = useForm<INewPost>();
     const [previewURL, setPreviewURL] = useState<null | string>(null);
     const [loading, setLoading] = useState(false);
@@ -131,7 +132,9 @@ function NewPostModal({
         form.set("body", data.body);
         form.set("author", user!.id);
         try {
-            await pb.collection("posts").create(form);
+            const newPost = await pb.collection("posts").create(form);
+            console.log(newPost);
+
             // reset();
             ref.current!.close();
         } catch (error) {

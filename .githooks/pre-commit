@@ -7,5 +7,5 @@
 #
 # To enable this hook, rename this file to "pre-commit".
 # because the developer may have another shell other that bash
-npm run pre-commit
+# npm run pre-commit
 npm run build

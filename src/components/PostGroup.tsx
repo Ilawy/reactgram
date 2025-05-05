@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
     FeedResponse,
     ProfilesRecord,
@@ -10,10 +10,6 @@ import { RecordModel } from "pocketbase";
 
 interface PostGroupProps {
     items: FeedResponse<number, { author: UsersRecord }>[];
-    likedPosts: { post: string; id: string }[];
-    setLikedPosts: React.Dispatch<
-        React.SetStateAction<{ post: string; id: string }[]>
-    >;
     user: (RecordModel & ProfilesRecord) | null;
     from: string;
 }
@@ -21,10 +17,13 @@ interface PostGroupProps {
 export default function PostGroup({
     items,
     user,
-    likedPosts,
-    setLikedPosts,
+    // likedPosts,
+    // setLikedPosts,
     from,
 }: PostGroupProps) {
+    const [likedPosts, setLikedPosts] = useState<
+        { post: string; id: string }[]
+    >([]);
     //TODO: find a way to inform the post of the new likes count
     useEffect(() => {
         const posts_filter = items.map((p) => `post='${p.id}'`).join("||");
