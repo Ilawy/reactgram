@@ -1,10 +1,7 @@
 import { motion, useInView } from "motion/react";
 import { useRef, useState } from "react";
 import pb from "../lib/pb";
-import {
-    FeedResponse,
-    UsersRecord,
-} from "../types/pocketbase-types";
+import { FeedResponse, UsersRecord } from "../types/pocketbase-types";
 import { useUser } from "../hooks/pb.context";
 import { Plus, UploadCloud } from "lucide-react";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -13,6 +10,7 @@ import { useNavigate } from "react-router";
 import PostGroup from "../components/PostGroup";
 import { toast } from "sonner";
 import { ClientResponseError } from "pocketbase";
+import { postsEvents } from "../lib/events";
 
 export default function Index() {
     const { user } = useUser();
@@ -65,14 +63,14 @@ export default function Index() {
                 {/* posts here */}
                 <PBInfinite<FeedResponse<number, { author: UsersRecord }>>
                     collection="feed"
+                    topic="index-feed"
                     options={{
                         expand: "author",
                         sort: "-created",
                     }}>
                     {({ items }) => (
                         <PostGroup
-                            // likedPosts={likedPosts}
-                            // setLikedPosts={setLikedPosts}
+                            topic="index-feed"
                             items={items}
                             user={user}
                             from="/"
@@ -132,8 +130,13 @@ function NewPostModal({ ref }: NewPostProps) {
         form.set("body", data.body);
         form.set("author", user!.id);
         try {
-            const newPost = await pb.collection("posts").create(form);
-            console.log(newPost);
+            const newPost = await pb.collection("posts").create(form, {
+                expand: "author",
+            });
+            postsEvents.emit("index-feed", {
+                action: "create",
+                record: newPost,
+            });
 
             // reset();
             ref.current!.close();

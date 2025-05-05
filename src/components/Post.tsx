@@ -15,6 +15,7 @@ interface PostProps {
     viewAs?: string;
     ref?: Ref<HTMLDivElement>;
     liked?: string;
+    topic: string;
 }
 
 export default function Post({ post, from, ref, liked }: PostProps) {

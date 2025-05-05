@@ -221,13 +221,19 @@ export default function Profile({ mode: initialMode }: ProfileProps) {
                 <div className="w-full flex items-center flex-col mx-auto gap-4  py-8 px-2">
                     <PBInfinite<FeedResponse<number, { author: UsersRecord }>>
                         collection="feed"
+                        topic="profile-feed"
                         options={{
                             filter: `author='${id}'`,
                             expand: `author`,
                             sort: "-created",
                         }}>
                         {({ items }) => (
-                            <PostGroup from={from} items={items} user={user} />
+                            <PostGroup
+                                from={from}
+                                topic="profile-feed"
+                                items={items}
+                                user={user}
+                            />
                         )}
                     </PBInfinite>
                 </div>

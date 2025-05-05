@@ -12,13 +12,13 @@ interface PostGroupProps {
     items: FeedResponse<number, { author: UsersRecord }>[];
     user: (RecordModel & ProfilesRecord) | null;
     from: string;
+    topic: string;
 }
 
 export default function PostGroup({
     items,
     user,
-    // likedPosts,
-    // setLikedPosts,
+    topic,
     from,
 }: PostGroupProps) {
     const [likedPosts, setLikedPosts] = useState<
@@ -66,6 +66,7 @@ export default function PostGroup({
                         key={item.id}
                         post={item}
                         from={from}
+                        topic={topic}
                     />
                 );
             })}

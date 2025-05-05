@@ -1,4 +1,4 @@
-import { RecordListOptions } from "pocketbase";
+import { RecordListOptions, RecordModel } from "pocketbase";
 import { CollectionRecords } from "../types/pocketbase-types";
 import { ReactNode, useCallback, useEffect, useState } from "react";
 import { useEffectOnce, useFirstMountState } from "react-use";
@@ -6,6 +6,7 @@ import { useInView } from "react-intersection-observer";
 import pb from "../lib/pb";
 import SkeletonPost from "./SkeletonPost";
 import { X } from "lucide-react";
+import { postsEvents } from "../lib/events";
 
 interface CallbackProps<T> {
     items: T[];
@@ -16,13 +17,15 @@ interface PBInfiniteProps<T> {
     options?: RecordListOptions;
     perPage?: number;
     children: (props: CallbackProps<T>) => ReactNode;
+    topic: string;
 }
 
-export default function PBInfinite<T extends {}>({
+export default function PBInfinite<T extends RecordModel>({
     collection,
     options = {},
     perPage = 10,
     children,
+    topic,
 }: PBInfiniteProps<T>) {
     const [page, setPage] = useState(1);
     const [items, setItems] = useState<T[]>([]);
@@ -34,6 +37,14 @@ export default function PBInfinite<T extends {}>({
     const isFirstMount = useFirstMountState();
 
     const { ref: endRef, inView: isEndInView } = useInView();
+
+    useEffect(() => {
+        postsEvents.on(topic, (event) => {
+            if (event.action === "create") {
+                setItems((items) => [event.record as any, ...items]);
+            }
+        });
+    }, []);
 
     useEffect(() => {
         if (
