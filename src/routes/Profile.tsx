@@ -73,10 +73,7 @@ export default function Profile({ mode: initialMode }: ProfileProps) {
     const [{ loading: unfollowLoading }, doUnfollow] = useAsyncFn(unfollow);
 
     const [
-        {
-            loading: followingLoading,
-            value: followRelation,
-        },
+        { loading: followingLoading, value: followRelation },
         fetchFollowRelationId,
     ] = useAsyncFn(getFollowRelationId, [user, profile]);
 
