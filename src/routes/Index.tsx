@@ -3,7 +3,7 @@ import { useRef, useState } from "react";
 import pb from "../lib/pb";
 import { FeedResponse, UsersRecord } from "../types/pocketbase-types";
 import { useUser } from "../hooks/pb.context";
-import { Plus, UploadCloud } from "lucide-react";
+import { ArrowUp, Plus, UploadCloud } from "lucide-react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import PBInfinite from "../components/PBInfinite";
 import { useNavigate } from "react-router";
@@ -46,6 +46,21 @@ export default function Index() {
                 }}
                 className={`fixed right-8 btn btn-xl btn-square rounded-full bg-primary text-primary-content`}>
                 <Plus />
+            </motion.button>
+            <motion.button
+                onClick={()=>scrollTo({top: 0, left: 0, behavior: "smooth"})}
+                initial={{
+                    bottom: !newPostInView ? "10%" : "-10%",
+                }}
+                animate={{
+                    bottom: !newPostInView ? "10%" : "-10%",
+                    transition: {
+                        bounce: 0.3,
+                        type: "spring",
+                    },
+                }}
+                className={`fixed right-24 btn btn-xl btn-square rounded-full bg-primary text-primary-content`}>
+                <ArrowUp />
             </motion.button>
 
             <motion.div className="w-full flex items-center flex-col mx-auto gap-4  py-8 px-2">
