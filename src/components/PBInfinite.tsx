@@ -24,7 +24,7 @@ interface PBInfiniteProps<T> {
 export default function PBInfinite<T extends RecordModel>({
     collection,
     options = {},
-    perPage = 10,
+    perPage = 5,
     children,
     topic,
 }: PBInfiniteProps<T>) {
