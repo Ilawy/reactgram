@@ -376,25 +376,27 @@ function ImageChanger({ user }: { user: AuthRecord & ProfilesRecord }) {
                 ref={inputRef}
                 className="hidden"
             />
-            <button
-                disabled={loading}
-                onClick={handleImageClick}
-                className="w-16 h-16 relative rounded-full overflow-hidden group">
-                {user.avatar && (
-                    <img
-                        className="brightness-70 group-hover:brightness-70"
-                        src={pb.files.getURL(user, user.avatar)}
-                        alt=""
-                    />
-                )}
-                <span className="absolute top-1/2 left-1/2 -translate-1/2 text-white">
-                    {loading ? (
-                        <span className="spinner loading"></span>
-                    ) : (
-                        <ArrowUpCircleIcon />
+            <div className="p-3 flex items-center justify-center">
+                <button
+                    disabled={loading}
+                    onClick={handleImageClick}
+                    className="w-20 h-20 relative rounded-full overflow-hidden group">
+                    {user.avatar && (
+                        <img
+                            className="brightness-70 group-hover:brightness-70"
+                            src={pb.files.getURL(user, user.avatar)}
+                            alt=""
+                        />
                     )}
-                </span>
-            </button>
+                    <span className="absolute top-1/2 left-1/2 -translate-1/2 text-white">
+                        {loading ? (
+                            <span className="spinner loading"></span>
+                        ) : (
+                            <ArrowUpCircleIcon />
+                        )}
+                    </span>
+                </button>
+            </div>
         </>
     );
 }

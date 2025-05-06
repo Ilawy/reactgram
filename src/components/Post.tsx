@@ -10,6 +10,7 @@ import { useUser } from "../hooks/pb.context";
 import { toast } from "sonner";
 import likeFalseSrc from "../assets/like-false.png";
 import likeTrueSrc from "../assets/like-true.png";
+import dotsSrc from "../assets/dots.png";
 
 interface PostProps {
     post: FeedResponse<number, { author: UsersRecord }>;
@@ -97,14 +98,11 @@ export default function Post({ post, from, ref, liked }: PostProps) {
                         </motion.span>
                     </motion.div>
                 </motion.div>
-                {/* <motion.div className="flex gap-3">
-                <button className="btn w-12 h-12">
-                    <Pen />
-                </button>
-                <button className="btn w-12 h-12">
-                    <Trash />
-                </button>
-            </motion.div> */}
+                <motion.div className="flex gap-3">
+                    <button className="btn bg-transparent btn-sm">
+                        <img src={dotsSrc} width={32} alt="" />
+                    </button>
+                </motion.div>
             </motion.div>
 
             <motion.img
