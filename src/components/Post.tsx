@@ -1,13 +1,15 @@
-import { Bookmark, ThumbsUp } from "lucide-react";
 import { motion } from "motion/react";
+import { animate } from "motion";
 import { FeedResponse, UsersRecord } from "../types/pocketbase-types";
 import DOMPurify from "dompurify";
 import { DateTime } from "luxon";
 import pb from "../lib/pb";
 import { Link, useNavigate } from "react-router";
-import { Ref, useState } from "react";
+import { Ref, useRef, useState } from "react";
 import { useUser } from "../hooks/pb.context";
 import { toast } from "sonner";
+import likeFalseSrc from "../assets/like-false.png";
+import likeTrueSrc from "../assets/like-true.png";
 
 interface PostProps {
     post: FeedResponse<number, { author: UsersRecord }>;
@@ -21,6 +23,7 @@ interface PostProps {
 export default function Post({ post, from, ref, liked }: PostProps) {
     const { user } = useUser();
     const [loading, setLoading] = useState(false);
+    const [likesCount, setLikesCount] = useState(post.likes);
     // const [postExpanded, setPostExpanded] = useState(false);
     const protectedImageUrl = pb.files.getURL(post, post.image);
     const profileImageUrl = pb.files.getURL(
@@ -28,8 +31,9 @@ export default function Post({ post, from, ref, liked }: PostProps) {
         post.expand?.author?.avatar!,
     );
     const navigate = useNavigate();
+    const likeIconRef = useRef<HTMLImageElement>(null);
 
-    function toggleLike() {
+    async function toggleLike() {
         if (!user) {
             toast.info("Please login first to like a post", {
                 action: {
@@ -45,10 +49,17 @@ export default function Post({ post, from, ref, liked }: PostProps) {
             setLoading(true);
             if (liked) {
                 pb.collection("likes").delete(liked);
+                setLikesCount((l) => (l || 1) - 1);
             } else {
                 pb.collection("likes").create({
                     post: post.id,
                     user: user.id,
+                });
+                setLikesCount((l) => (l || 0) + 1);
+                animate(likeIconRef.current!, {
+                    filter: ["blur(1px)", "blur(3px)", "blur(0px)"],
+                    y: [0, -5, 0],
+                    scale: ["1", "1.2", "1"],
                 });
             }
         } catch (error) {
@@ -108,10 +119,13 @@ export default function Post({ post, from, ref, liked }: PostProps) {
                     disabled={loading}
                     className="flex items-center gap-2"
                     onClick={toggleLike}>
-                    <ThumbsUp fill={liked ? "#36e" : "none"} stroke="#eee" />
-                    {post.likes}
+                    <img
+                        ref={likeIconRef}
+                        src={liked ? likeTrueSrc : likeFalseSrc}
+                        width="32px"
+                    />
+                    {likesCount}
                 </motion.button>
-                <Bookmark />
             </motion.div>
             <motion.p
                 layout

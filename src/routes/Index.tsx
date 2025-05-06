@@ -48,7 +48,9 @@ export default function Index() {
                 <Plus />
             </motion.button>
             <motion.button
-                onClick={()=>scrollTo({top: 0, left: 0, behavior: "smooth"})}
+                onClick={() =>
+                    scrollTo({ top: 0, left: 0, behavior: "smooth" })
+                }
                 initial={{
                     bottom: !newPostInView ? "10%" : "-10%",
                 }}
