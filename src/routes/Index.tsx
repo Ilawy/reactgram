@@ -76,14 +76,14 @@ export default function Index() {
                 {/* posts here */}
                 <PBInfinite<FeedResponse<number, { author: UsersRecord }>>
                     collection="feed"
-                    topic="index-feed"
+                    topic="feed"
                     options={{
                         expand: "author",
                         sort: "-created",
                     }}>
                     {({ items }) => (
                         <PostGroup
-                            topic="index-feed"
+                            topic="feed"
                             items={items}
                             user={user}
                             from="/"

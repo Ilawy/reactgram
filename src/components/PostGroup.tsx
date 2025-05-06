@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
     FeedResponse,
     ProfilesRecord,
@@ -8,6 +8,7 @@ import Post from "./Post";
 import pb from "../lib/pb";
 import { RecordModel } from "pocketbase";
 import _ from "lodash";
+import PostModal from "./PostModal";
 
 interface PostGroupProps {
     items: FeedResponse<number, { author: UsersRecord }>[];
@@ -56,9 +57,16 @@ export default function PostGroup({
             unsubscribe.then((d) => d());
         };
     }, [items, user]);
+    const modalRef = useRef<
+        HTMLDialogElement & {
+            edit: (post: PostGroupProps["items"][number]) => void;
+        }
+    >(null);
+    console.log(modalRef);
 
     return (
         <>
+            <PostModal ref={modalRef} />
             {items.map((item) => {
                 return (
                     <Post
@@ -67,6 +75,9 @@ export default function PostGroup({
                         post={item}
                         from={from}
                         topic={topic}
+                        onPostEdit={(post) => {
+                            modalRef.current?.edit(post);
+                        }}
                     />
                 );
             })}

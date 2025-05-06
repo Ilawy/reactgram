@@ -19,9 +19,18 @@ interface PostProps {
     ref?: Ref<HTMLDivElement>;
     liked?: string;
     topic: string;
+    onPostEdit(
+        post: FeedResponse<number, { author: UsersRecord }>,
+    ): void | Promise<void>;
 }
 
-export default function Post({ post, from, ref, liked }: PostProps) {
+export default function Post({
+    post,
+    from,
+    ref,
+    liked,
+    onPostEdit,
+}: PostProps) {
     const { user } = useUser();
     const [loading, setLoading] = useState(false);
     const [likesCount, setLikesCount] = useState(post.likes);
@@ -99,7 +108,9 @@ export default function Post({ post, from, ref, liked }: PostProps) {
                     </motion.div>
                 </motion.div>
                 <motion.div className="flex gap-3">
-                    <button className="btn bg-transparent btn-sm">
+                    <button
+                        onClick={() => onPostEdit(post)}
+                        className="btn bg-transparent btn-sm">
                         <img src={dotsSrc} width={32} alt="" />
                     </button>
                 </motion.div>

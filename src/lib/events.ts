@@ -1,12 +1,11 @@
 import mitt from "mitt";
 import { PostsResponse } from "../types/pocketbase-types";
 
-type PostsEventsType = Record<
-    string,
-    {
-        action: "create" | "edit" | "update" | "delete";
+export type GlobalEventsType = {
+    feed: {
+        action: "create" | "update" | "delete";
         record: PostsResponse;
-    }
->;
+    };
+};
 
-export const postsEvents = mitt<PostsEventsType>();
+export const globalEvents = mitt<GlobalEventsType>();

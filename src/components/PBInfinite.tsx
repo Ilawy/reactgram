@@ -6,7 +6,7 @@ import { useInView } from "react-intersection-observer";
 import pb from "../lib/pb";
 import SkeletonPost from "./SkeletonPost";
 import { X } from "lucide-react";
-import { postsEvents } from "../lib/events";
+import { globalEvents, GlobalEventsType } from "../lib/events";
 import { uniqBy } from "lodash";
 
 interface CallbackProps<T> {
@@ -40,7 +40,7 @@ export default function PBInfinite<T extends RecordModel>({
     const { ref: endRef, inView: isEndInView } = useInView();
 
     useEffect(() => {
-        postsEvents.on(topic, (event) => {
+        globalEvents.on(topic as any, (event: GlobalEventsType["feed"]) => {
             if (event.action === "create") {
                 setItems((items) => {
                     const result = uniqBy(
@@ -49,6 +49,14 @@ export default function PBInfinite<T extends RecordModel>({
                     );
                     return result;
                 });
+            } else if (event.action === "update") {
+                setItems((items) =>
+                    items.map((item) =>
+                        item.id === event.record.id
+                            ? (event.record as any)
+                            : item,
+                    ),
+                );
             }
         });
     }, []);

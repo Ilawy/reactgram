@@ -1,11 +1,11 @@
 import { UploadCloud } from "lucide-react";
 import { motion } from "motion/react";
 import { ClientResponseError } from "pocketbase";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { toast } from "sonner";
 import { useUser } from "../hooks/pb.context";
-import { postsEvents } from "../lib/events";
+import { globalEvents } from "../lib/events";
 import pb from "../lib/pb";
 
 interface IPost {
@@ -18,24 +18,49 @@ export interface PostModalProps {
     // insertNewPost(post: PostsResponse): void | Promise<void>
 }
 
+function createNewPost(form: FormData) {
+    return pb.collection("posts").create(form, {
+        expand: "author",
+    });
+}
+
+function updatePost(id: string, form: FormData) {
+    return pb.collection("posts").update(id, form, {
+        expand: "author",
+    });
+}
+
 export default function PostModal({ ref }: PostModalProps) {
-    const { register, handleSubmit, formState, reset } = useForm<IPost>();
+    const { register, handleSubmit, formState, reset, setValue } =
+        useForm<IPost>();
     const [previewURL, setPreviewURL] = useState<null | string>(null);
     const [loading, setLoading] = useState(false);
-
+    const [mode, setMode] = useState<"create" | "edit">("create");
+    const [editId, setEditId] = useState<null | string>(null);
     const { user } = useUser();
     const {
         ref: fileInputRefSetter,
         onChange: fineInputOnChange,
         ...fileInputRegister
     } = register("image", {
-        required: "Please select an image",
+        required: mode === "create" ? "Please select an image" : false,
     });
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     function invokeFilePicker() {
         fileInputRef.current!.click();
     }
+
+    useEffect(() => {
+        if (!ref.current) return;
+        //@ts-expect-error (TODO: find a better way to do this)
+        ref.current.edit = function (post: any) {
+            setMode("edit");
+            setEditId(post.id);
+            setValue("body", post.body);
+            ref.current?.showModal();
+        };
+    }, []);
 
     const displayImagePreview: React.InputHTMLAttributes<HTMLInputElement>["onChange"] =
         (event) => {
@@ -52,17 +77,27 @@ export default function PostModal({ ref }: PostModalProps) {
     const submit: SubmitHandler<IPost> = async (data) => {
         setLoading(true);
         const form = new FormData();
-        form.set("image", data.image.item(0)!);
-        form.set("body", data.body);
-        form.set("author", user!.id);
         try {
-            const newPost = await pb.collection("posts").create(form, {
-                expand: "author",
-            });
-            postsEvents.emit("index-feed", {
-                action: "create",
-                record: newPost,
-            });
+            if (mode === "create") {
+                form.set("image", data.image.item(0)!);
+                form.set("body", data.body);
+                form.set("author", user!.id);
+                const newPost = await createNewPost(form);
+                globalEvents.emit("feed", {
+                    action: "create",
+                    record: newPost,
+                });
+            } else {
+                form.set("body", data.body);
+                if (!editId) {
+                    throw new Error("Cannot edit post, please contact admin");
+                }
+                const updatedPost = await updatePost(editId, form);
+                globalEvents.emit("feed", {
+                    action: "update",
+                    record: updatedPost,
+                });
+            }
 
             reset();
             setPreviewURL(null);
@@ -134,7 +169,9 @@ export default function PostModal({ ref }: PostModalProps) {
                         disabled={loading}
                         className="btn btn-primary btn-soft"
                         layout>
-                        <motion.span layout>Post</motion.span>
+                        <motion.span layout>
+                            {mode === "create" ? "Post" : "Update"}
+                        </motion.span>
                         {loading && (
                             <motion.span
                                 layout
@@ -143,6 +180,11 @@ export default function PostModal({ ref }: PostModalProps) {
                         )}
                     </motion.button>
                     <button
+                        onClick={() => {
+                            ref.current?.close();
+                            reset();
+                            setPreviewURL(null);
+                        }}
                         disabled={loading}
                         form="_new_post_dialog_close"
                         className="btn btn-outline btn-soft">
