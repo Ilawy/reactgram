@@ -7,6 +7,7 @@ import {
 import Post from "./Post";
 import pb from "../lib/pb";
 import { RecordModel } from "pocketbase";
+import _ from "lodash";
 
 interface PostGroupProps {
     items: FeedResponse<number, { author: UsersRecord }>[];
@@ -14,7 +15,6 @@ interface PostGroupProps {
     from: string;
     topic: string;
 }
-
 export default function PostGroup({
     items,
     user,

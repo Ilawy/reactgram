@@ -93,7 +93,7 @@ interface NewPostProps {
 }
 
 function NewPostModal({ ref }: NewPostProps) {
-    const { register, handleSubmit, formState } = useForm<INewPost>();
+    const { register, handleSubmit, formState, reset } = useForm<INewPost>();
     const [previewURL, setPreviewURL] = useState<null | string>(null);
     const [loading, setLoading] = useState(false);
 
@@ -138,7 +138,8 @@ function NewPostModal({ ref }: NewPostProps) {
                 record: newPost,
             });
 
-            // reset();
+            reset();
+            setPreviewURL(null);
             ref.current!.close();
         } catch (error) {
             if (error instanceof ClientResponseError && error.data.data) {

@@ -43,16 +43,19 @@ export default function OAuthOptions() {
         );
     else if (value)
         return (
-            <div className="flex flex-col gap-2">
-                {value.map((option) => (
-                    <button
-                        disabled={authLoading}
-                        onClick={() => authUsingProvider(option)}
-                        type="button"
-                        className="btn btn-secondary btn-soft">
-                        {option.displayName}
-                    </button>
-                ))}
-            </div>
+            <>
+                <div className="divider">OR</div>
+                <div className="flex flex-col gap-2">
+                    {value.map((option) => (
+                        <button
+                            disabled={authLoading}
+                            onClick={() => authUsingProvider(option)}
+                            type="button"
+                            className="btn btn-secondary btn-soft">
+                            {option.displayName}
+                        </button>
+                    ))}
+                </div>
+            </>
         );
 }

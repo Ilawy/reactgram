@@ -7,6 +7,7 @@ import pb from "../lib/pb";
 import SkeletonPost from "./SkeletonPost";
 import { X } from "lucide-react";
 import { postsEvents } from "../lib/events";
+import { uniqBy } from "lodash";
 
 interface CallbackProps<T> {
     items: T[];
@@ -41,7 +42,13 @@ export default function PBInfinite<T extends RecordModel>({
     useEffect(() => {
         postsEvents.on(topic, (event) => {
             if (event.action === "create") {
-                setItems((items) => [event.record as any, ...items]);
+                setItems((items) => {
+                    const result = uniqBy(
+                        [event.record as any, ...items],
+                        "id",
+                    );
+                    return result;
+                });
             }
         });
     }, []);
@@ -70,7 +77,7 @@ export default function PBInfinite<T extends RecordModel>({
                     .getList<T>(page, perPage, options);
                 setTotalItems(result.totalItems);
                 setTotalPages(result.totalPages);
-                setItems((old) => [...old, ...result.items]);
+                setItems((old) => uniqBy([...old, ...result.items], "id"));
             } catch (error) {
                 console.log(error);
 

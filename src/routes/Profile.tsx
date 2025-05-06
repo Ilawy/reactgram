@@ -7,7 +7,7 @@ import {
     UserPlus,
 } from "lucide-react";
 import { useUser } from "../hooks/pb.context";
-import { Link, useLocation, useParams } from "react-router";
+import { Link, useLocation, useNavigate, useParams } from "react-router";
 import { useAsyncFn } from "react-use";
 import pb from "../lib/pb";
 import {
@@ -102,7 +102,7 @@ export default function Profile({ mode: initialMode }: ProfileProps) {
     };
 
     const location = useLocation();
-
+    const navigate = useNavigate();
     const actionsLoading =
         profileLoading && userLoading && (followingLoading || unfollowLoading);
 
@@ -118,6 +118,12 @@ export default function Profile({ mode: initialMode }: ProfileProps) {
     ];
 
     if (error) {
+        if (mode === "self") {
+            //forcefully logout in this case
+            pb.authStore.clear();
+            navigate("/auth");
+            return null;
+        }
         return (
             <div className="flex flex-col p-3 items-center justify-center text-lg mt-16">
                 <Annoyed size={64} className="mb-8" />
