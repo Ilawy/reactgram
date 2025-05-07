@@ -7,6 +7,7 @@ import Auth from "./routes/Auth";
 import { Toaster } from "sonner";
 import LoginGuard from "./components/LoginGuard";
 import Aside from "./components/Aside";
+import Search from "./routes/Search";
 
 function App() {
     return (
@@ -19,6 +20,14 @@ function App() {
                         <article className="col-span-4 lg:col-span-2 mb-24">
                             <Routes>
                                 <Route path="/" element={<Index />} />
+                                <Route
+                                    path="/search"
+                                    element={
+                                        <LoginGuard>
+                                            <Search />
+                                        </LoginGuard>
+                                    }
+                                />
                                 <Route
                                     path="/profile"
                                     element={

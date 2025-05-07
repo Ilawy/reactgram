@@ -10,7 +10,7 @@ export default function LoginGuard({ children }: PropsWithChildren) {
                 <div className="spinner spinner-lg"></div>
             </div>
         );
-    } else if (!user) {
+    } else if (!loading && !user) {
         return <Auth />;
     } else {
         return children;

@@ -2,19 +2,16 @@
 import { useHash } from "react-use";
 import { RegisterForm } from "../components/RegisterForm";
 import { LoginForm } from "../components/LoginForm";
-import { useEffect } from "react";
-import pb from "../lib/pb";
-import { useNavigate } from "react-router";
 
 export default function Auth() {
     const [hash] = useHash();
     const mode = hash === "#register" ? "register" : "login";
-    const returnPath =
-        new URL(location.href).searchParams.get("return") || "/profile";
-    const navigate = useNavigate();
-    useEffect(() => {
-        if (pb.authStore.isValid) navigate(returnPath);
-    }, []);
+    // const returnPath =
+    //     new URL(location.href).searchParams.get("return") || "/profile";
+    // const navigate = useNavigate();
+    // useEffect(() => {
+    //     if (pb.authStore.isValid) navigate(returnPath);
+    // }, []);
 
     return (
         <div className="p-3 py-8 flex flex-col justify-center flex-1">
