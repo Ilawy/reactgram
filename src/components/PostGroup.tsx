@@ -62,8 +62,6 @@ export default function PostGroup({
             edit: (post: PostGroupProps["items"][number]) => void;
         }
     >(null);
-    console.log(modalRef);
-
     return (
         <>
             <PostModal ref={modalRef} />

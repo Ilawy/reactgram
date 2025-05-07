@@ -13,11 +13,13 @@ export const dockItems: DockItemProps[] = [
         to: "/",
         icon: <Compass />,
         label: "Explore",
+        scrollToTop: true,
     },
     {
         to: "/search",
         icon: <Search />,
         label: "Search",
+        scrollToTop: true,
     },
 
     // {
