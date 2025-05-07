@@ -108,11 +108,13 @@ export default function Post({
                     </motion.div>
                 </motion.div>
                 <motion.div className="flex gap-3">
-                    <button
-                        onClick={() => onPostEdit(post)}
-                        className="btn bg-transparent btn-sm">
-                        <img src={dotsSrc} width={32} alt="" />
-                    </button>
+                    {post.expand.author.id === user?.id && (
+                        <button
+                            onClick={() => onPostEdit(post)}
+                            className="btn bg-transparent btn-sm">
+                            <img src={dotsSrc} width={32} alt="" />
+                        </button>
+                    )}
                 </motion.div>
             </motion.div>
 
