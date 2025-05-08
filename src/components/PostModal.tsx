@@ -106,7 +106,7 @@ export default function PostModal({ ref }: PostModalProps) {
         } catch (error) {
             if (error instanceof ClientResponseError && error.data.data) {
                 toast.error(
-                    <pre>{JSON.stringify(error.data.data, null, 2)}</pre>
+                    <pre>{JSON.stringify(error.data.data, null, 2)}</pre>,
                 );
             }
             toast.error((error as Error).message);

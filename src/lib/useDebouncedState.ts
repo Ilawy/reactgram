@@ -10,10 +10,10 @@ export default function useDebouncedState<T>(initial: T): [T, (_v: T) => void] {
             setTimer(
                 setTimeout(() => {
                     setValue(value);
-                }, 300)
+                }, 300),
             );
         },
-        [timer]
+        [timer],
     );
 
     return [value, callback];

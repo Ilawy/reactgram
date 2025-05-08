@@ -19,7 +19,7 @@ export async function followUser(follower: string, following: string) {
                         .includes("validation_not_unique")
                 )
                     return Promise.reject(
-                        new Error("You're already following this account")
+                        new Error("You're already following this account"),
                     );
             }
             return Promise.reject(new Error(error));
@@ -28,14 +28,14 @@ export async function followUser(follower: string, following: string) {
 
 export function getFollowedUsers(id: string, list: string[]) {
     const followedFilter = list.map((id) =>
-        pb.filter(`followee = {:id}`, { id })
+        pb.filter(`followee = {:id}`, { id }),
     );
     return pb.collection("follows").getFullList({
         filter: pb.filter(
             `follower= {:id} && ${
                 followedFilter.length ? followedFilter.join("||") : "false"
             }`,
-            { id }
+            { id },
         ),
         fields: "follower,followee",
     });

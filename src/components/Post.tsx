@@ -20,7 +20,7 @@ interface PostProps {
     liked?: string;
     topic: string;
     onPostEdit(
-        post: FeedResponse<number, { author: UsersRecord }>
+        post: FeedResponse<number, { author: UsersRecord }>,
     ): void | Promise<void>;
 }
 
@@ -38,7 +38,7 @@ export default function Post({
     const protectedImageUrl = pb.files.getURL(post, post.image);
     const profileImageUrl = pb.files.getURL(
         post.expand?.author,
-        post.expand?.author?.avatar!
+        post.expand?.author?.avatar!,
     );
     const navigate = useNavigate();
     const likeIconRef = useRef<HTMLImageElement>(null);

@@ -20,7 +20,7 @@ export const pbContext = createContext<{
 
 export function PBProvider({ children }: PropsWithChildren) {
     const [user, setUser] = useState<null | (AuthRecord & ProfilesRecord)>(
-        null
+        null,
     );
     const [loading, setLoading] = useState(false);
     useEffect(() => {

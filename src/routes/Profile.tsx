@@ -41,7 +41,7 @@ async function unfollow(id: string) {
 
 async function getFollowRelationId(
     follower: string | undefined,
-    following: string | undefined
+    following: string | undefined,
 ) {
     return pb
         .collection("follows")
@@ -49,7 +49,7 @@ async function getFollowRelationId(
         .catch((e) =>
             e instanceof ClientResponseError && e.status === 404
                 ? null
-                : Promise.reject(e)
+                : Promise.reject(e),
         )
         .then((v) => v?.id);
 }
@@ -64,7 +64,7 @@ export default function Profile({ mode: initialMode }: ProfileProps) {
     const [{ loading: profileLoading, value: profile, error }, fetchProfile] =
         useAsyncFn(
             () => pb.collection("profiles").getOne<ProfilesRecord>(id),
-            [user]
+            [user],
         );
 
     const [{ loading: unfollowLoading }, doUnfollow] = useAsyncFn(unfollow);
@@ -165,7 +165,7 @@ export default function Profile({ mode: initialMode }: ProfileProps) {
                                 <img
                                     src={pb.files.getURL(
                                         profile,
-                                        profile.avatar
+                                        profile.avatar,
                                     )}
                                     className="rounded-full w-24 h-24"
                                     alt=""
@@ -298,13 +298,13 @@ function DetailsChanger({ user }: { user: AuthRecord & ProfilesRecord }) {
     } = useForm<IChangableDetails>();
     const [{ loading }, updateDetails] = useAsyncFn(
         (data: Partial<IChangableDetails>) =>
-            pb.collection("users").update(user.id, data)
+            pb.collection("users").update(user.id, data),
     );
 
     async function submit(data: IChangableDetails) {
         const updatedOnlyValues = getUpdatedObject<IChangableDetails>(
             pick(user, ["name"]),
-            data
+            data,
         );
         if (!Object.keys(updatedOnlyValues).length) {
             toast.error("No values are updated");

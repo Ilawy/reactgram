@@ -1,6 +1,6 @@
 export function getUpdatedObject<T extends object>(
     original: Partial<T>,
-    updated: Partial<T>
+    updated: Partial<T>,
 ): Partial<T> {
     return Object.keys(original).reduce((result, k) => {
         const key = k as keyof T;

@@ -40,7 +40,7 @@ export function LoginForm() {
         (data: ILogin) => {
             loginFn(data, navigate);
         },
-        [loginFn, navigate]
+        [loginFn, navigate],
     );
     return (
         <>
