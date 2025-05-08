@@ -1,19 +1,20 @@
 //@ts-check
 /// <reference path="../.pb_data/types.d.ts" />
 
-// Ensure that only one post is being pinned for each user
+// Ensure that only one post is being pinned for each author
 onRecordCreate((e) => {
     if (!e.record) throw new Error("cannot access record");
-    const user = e.record.get("user");
-    if (typeof user !== "string") throw new Error("cannot retrieve user id");
+    const author = e.record.get("author");
+    if (typeof author !== "string")
+        throw new Error("cannot retrieve author id");
 
     if (!e.record.get("pinned")) {
         e.next();
         return;
     }
     const pinned = $app.findRecordsByFilter(
-        "test",
-        `user='${user}' && pinned = true`,
+        "posts",
+        `author='${author}' && pinned = true`,
         "created",
         0,
         0
@@ -25,20 +26,21 @@ onRecordCreate((e) => {
         $app.save(post);
     }
     e.next();
-}, "test");
+}, "posts");
 
-// Ensure that only one post is being pinned for each user (on update)
+// Ensure that only one post is being pinned for each author (on update)
 onRecordUpdate((e) => {
     if (!e.record) throw new Error("cannot access record");
-    const user = e.record.get("user");
-    if (typeof user !== "string") throw new Error("cannot retrieve user id");
+    const author = e.record.get("author");
+    if (typeof author !== "string")
+        throw new Error("cannot retrieve author id");
     if (!e.record.get("pinned")) {
         e.next();
         return;
     }
     const pinned = $app.findRecordsByFilter(
-        "test",
-        `user='${user}' && pinned = true`,
+        "posts",
+        `author='${author}' && pinned = true`,
         "created",
         0,
         0
@@ -50,4 +52,4 @@ onRecordUpdate((e) => {
         $app.save(post);
     }
     e.next();
-}, "test");
+}, "posts");

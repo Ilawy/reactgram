@@ -14,12 +14,14 @@ interface PostGroupProps {
     user: (RecordModel & ProfilesRecord) | null;
     from: string;
     topic: string;
+    customActions: Parameters<typeof Post>[0]["customActions"];
 }
 export default function PostGroup({
     items,
     user,
     topic,
     from,
+    customActions,
 }: PostGroupProps) {
     const [likedPosts, setLikedPosts] = useState<
         { post: string; id: string }[]
@@ -33,7 +35,7 @@ export default function PostGroup({
             (event) => {
                 if (event.action === "delete") {
                     setLikedPosts((likes) =>
-                        likes.filter((like) => like.id !== event.record.id),
+                        likes.filter((like) => like.id !== event.record.id)
                     );
                 } else if (event.action === "create") {
                     setLikedPosts((likes) => [...likes, event.record]);
@@ -42,7 +44,7 @@ export default function PostGroup({
             {
                 filter: `(${posts_filter})`,
                 fields: "post,id",
-            },
+            }
         );
 
         pb.collection("likes")
@@ -75,6 +77,7 @@ export default function PostGroup({
                         onPostEdit={(post) => {
                             modalRef.current?.edit(post);
                         }}
+                        customActions={customActions}
                     />
                 );
             })}

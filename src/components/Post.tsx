@@ -5,12 +5,13 @@ import DOMPurify from "dompurify";
 import { DateTime } from "luxon";
 import pb from "../lib/pb";
 import { Link, useNavigate } from "react-router";
-import { Ref, useRef, useState } from "react";
+import { ReactNode, Ref, useRef, useState } from "react";
 import { useUser } from "../hooks/pb.context";
 import { toast } from "sonner";
 import likeFalseSrc from "../assets/like-false.png";
 import likeTrueSrc from "../assets/like-true.png";
 import dotsSrc from "../assets/dots.png";
+import { AuthRecord } from "pocketbase";
 
 interface PostProps {
     post: FeedResponse<number, { author: UsersRecord }>;
@@ -20,8 +21,12 @@ interface PostProps {
     liked?: string;
     topic: string;
     onPostEdit(
-        post: FeedResponse<number, { author: UsersRecord }>,
+        post: FeedResponse<number, { author: UsersRecord }>
     ): void | Promise<void>;
+    customActions?: (props: {
+        post: FeedResponse<number, { author: UsersRecord }>;
+        user: AuthRecord;
+    }) => ReactNode;
 }
 
 export default function Post({
@@ -30,6 +35,7 @@ export default function Post({
     ref,
     liked,
     onPostEdit,
+    customActions,
 }: PostProps) {
     const { user } = useUser();
     const [loading, setLoading] = useState(false);
@@ -38,7 +44,7 @@ export default function Post({
     const protectedImageUrl = pb.files.getURL(post, post.image);
     const profileImageUrl = pb.files.getURL(
         post.expand?.author,
-        post.expand?.author?.avatar!,
+        post.expand?.author?.avatar!
     );
     const navigate = useNavigate();
     const likeIconRef = useRef<HTMLImageElement>(null);
@@ -108,7 +114,7 @@ export default function Post({
                         </motion.span>
                     </motion.div>
                 </motion.div>
-                <motion.div className="flex gap-3">
+                <motion.div className="flex items-center gap-3">
                     {post.expand.author.id === user?.id && (
                         <button
                             onClick={() => onPostEdit(post)}
@@ -116,6 +122,7 @@ export default function Post({
                             <img src={dotsSrc} width={32} alt="" />
                         </button>
                     )}
+                    {customActions && customActions({ post, user })}
                 </motion.div>
             </motion.div>
 

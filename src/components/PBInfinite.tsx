@@ -56,7 +56,7 @@ export default function PBInfinite<T extends RecordModel>({
                 setLoading(false);
             }
         },
-        [collection, options, perPage],
+        [collection, options, perPage]
     );
 
     useEffect(() => {
@@ -67,17 +67,19 @@ export default function PBInfinite<T extends RecordModel>({
                     const result = uniqBy(
                         // eslint-disable-next-line @typescript-eslint/no-explicit-any
                         [event.record as any, ...items],
-                        "id",
+                        "id"
                     );
                     return result;
                 });
             } else if (event.action === "update") {
+                console.log("got update!!");
+
                 setItems((items) =>
                     items.map((item) =>
                         item.id === event.record.id
                             ? (event.record as unknown as T)
-                            : item,
-                    ),
+                            : item
+                    )
                 );
             }
         });
