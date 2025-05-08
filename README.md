@@ -3,6 +3,8 @@
 
 
 ## Features
+- **Search**
+    - users can search for each others by name
 - **Profiles**
     - profile updates (avatar, name)
     - displaying basic info (avatar, name, posts count and followers count)
