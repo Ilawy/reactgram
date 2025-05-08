@@ -9,4 +9,5 @@
 # because the developer may have another shell other that bash
 # npm run pre-commit
 npm run pre-commit
+git add .
 npm run lint

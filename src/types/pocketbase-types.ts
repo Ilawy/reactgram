@@ -16,6 +16,7 @@ export enum Collections {
     Likes = "likes",
     Posts = "posts",
     Profiles = "profiles",
+    Test = "test",
     Users = "users",
 }
 
@@ -102,6 +103,7 @@ export type FeedRecord<Tlikes = unknown> = {
     id: string;
     image: string;
     likes?: null | Tlikes;
+    pinned?: boolean;
     updated?: IsoDateString;
 };
 
@@ -127,6 +129,7 @@ export type PostsRecord = {
     created?: IsoDateString;
     id: string;
     image: string;
+    pinned?: boolean;
     updated?: IsoDateString;
 };
 
@@ -137,6 +140,14 @@ export type ProfilesRecord<Tfollowers = unknown, Tposts = unknown> = {
     id: string;
     name?: string;
     posts?: null | Tposts;
+};
+
+export type TestRecord = {
+    created?: IsoDateString;
+    id: string;
+    pinned?: boolean;
+    updated?: IsoDateString;
+    user?: RecordIdString;
 };
 
 export type UsersRecord = {
@@ -179,6 +190,8 @@ export type ProfilesResponse<
     Tposts = unknown,
     Texpand = unknown,
 > = Required<ProfilesRecord<Tfollowers, Tposts>> & BaseSystemFields<Texpand>;
+export type TestResponse<Texpand = unknown> = Required<TestRecord> &
+    BaseSystemFields<Texpand>;
 export type UsersResponse<Texpand = unknown> = Required<UsersRecord> &
     AuthSystemFields<Texpand>;
 
@@ -195,6 +208,7 @@ export type CollectionRecords = {
     likes: LikesRecord;
     posts: PostsRecord;
     profiles: ProfilesRecord;
+    test: TestRecord;
     users: UsersRecord;
 };
 
@@ -209,6 +223,7 @@ export type CollectionResponses = {
     likes: LikesResponse;
     posts: PostsResponse;
     profiles: ProfilesResponse;
+    test: TestResponse;
     users: UsersResponse;
 };
 
@@ -228,5 +243,6 @@ export type TypedPocketBase = PocketBase & {
     collection(idOrName: "likes"): RecordService<LikesResponse>;
     collection(idOrName: "posts"): RecordService<PostsResponse>;
     collection(idOrName: "profiles"): RecordService<ProfilesResponse>;
+    collection(idOrName: "test"): RecordService<TestResponse>;
     collection(idOrName: "users"): RecordService<UsersResponse>;
 };

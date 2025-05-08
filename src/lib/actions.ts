@@ -50,3 +50,9 @@ export function displayError(error: unknown) {
         toast.error(`${error}`);
     }
 }
+
+export async function togglePostPin(postId: string, oldPin: boolean) {
+    return await pb
+        .collection("posts")
+        .update(postId, { pinned: !oldPin }, { expand: "author" });
+}

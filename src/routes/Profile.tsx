@@ -3,6 +3,7 @@ import {
     ArrowLeft,
     ArrowUpCircleIcon,
     Pen,
+    Pin,
     UserMinus,
     UserPlus,
 } from "lucide-react";
@@ -30,6 +31,8 @@ import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import { getUpdatedObject } from "../lib/utils";
 import { pick } from "lodash";
+import { displayError, togglePostPin } from "../lib/actions";
+import { globalEvents } from "../lib/events";
 
 interface ProfileProps {
     mode: "self" | "user";
@@ -227,11 +230,11 @@ export default function Profile({ mode: initialMode }: ProfileProps) {
                 <div className="w-full flex items-center flex-col mx-auto gap-4  py-8 px-2">
                     <PBInfinite<FeedResponse<number, { author: UsersRecord }>>
                         collection="feed"
-                        topic="profile-feed"
+                        topic="feed"
                         options={{
                             filter: `author='${id}'`,
                             expand: `author`,
-                            sort: "-created",
+                            sort: "-pinned,-created",
                         }}>
                         {({ items }) => (
                             <PostGroup
@@ -239,12 +242,47 @@ export default function Profile({ mode: initialMode }: ProfileProps) {
                                 topic="profile-feed"
                                 items={items}
                                 user={user}
+                                customActions={PostActions}
                             />
                         )}
                     </PBInfinite>
                 </div>
             </ProfileEditDrawer>
         </>
+    );
+}
+
+function PostActions({
+    post,
+    user,
+}: {
+    post: FeedResponse<number, { author: UsersRecord }>;
+    user: AuthRecord;
+}): ReactNode {
+    const [{ loading }, invokeTogglePostPin] = useAsyncFn(togglePostPin);
+
+    if (post.author !== user?.id) return null;
+    if (loading) return <span className="spinner loading" />;
+    return (
+        <button
+            disabled={post.pinned}
+            className="btn-xs rotate-45"
+            onClick={async () => {
+                try {
+                    const newPost = await invokeTogglePostPin(
+                        post.id,
+                        post.pinned,
+                    );
+                    globalEvents.emit("feed", {
+                        action: "update",
+                        record: newPost,
+                    });
+                } catch (error) {
+                    displayError(error);
+                }
+            }}>
+            <Pin fill={post.pinned ? "currentColor" : "none"} />
+        </button>
     );
 }
 

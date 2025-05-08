@@ -72,6 +72,8 @@ export default function PBInfinite<T extends RecordModel>({
                     return result;
                 });
             } else if (event.action === "update") {
+                console.log("got update!!");
+
                 setItems((items) =>
                     items.map((item) =>
                         item.id === event.record.id
