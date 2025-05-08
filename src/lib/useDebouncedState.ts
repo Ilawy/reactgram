@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 
-export default function useDebouncedState<T>(initial: T): [T, (v: T) => void] {
+export default function useDebouncedState<T>(initial: T): [T, (_v: T) => void] {
     const [value, setValue] = useState<T>(initial);
     const [timer, setTimer] = useState<ReturnType<typeof setTimeout>>();
 
@@ -13,7 +13,7 @@ export default function useDebouncedState<T>(initial: T): [T, (v: T) => void] {
                 }, 300),
             );
         },
-        [timer, value],
+        [timer],
     );
 
     return [value, callback];

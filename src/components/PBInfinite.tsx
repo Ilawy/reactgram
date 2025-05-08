@@ -38,44 +38,6 @@ export default function PBInfinite<T extends RecordModel>({
     const isFirstMount = useFirstMountState();
 
     const { ref: endRef, inView: isEndInView } = useInView();
-
-    useEffect(() => {
-        globalEvents.on(topic as any, (event: GlobalEventsType["feed"]) => {
-            if (event.action === "create") {
-                setItems((items) => {
-                    const result = uniqBy(
-                        [event.record as any, ...items],
-                        "id",
-                    );
-                    return result;
-                });
-            } else if (event.action === "update") {
-                setItems((items) =>
-                    items.map((item) =>
-                        item.id === event.record.id
-                            ? (event.record as any)
-                            : item,
-                    ),
-                );
-            }
-        });
-    }, []);
-
-    useEffect(() => {
-        if (
-            isEndInView &&
-            items.length > 0 &&
-            totalItems > items.length &&
-            page < totalPage &&
-            !isFirstMount
-        ) {
-            setPage((p) => {
-                fetchChunk(p + 1);
-                return p + 1;
-            });
-        }
-    }, [isEndInView, items]);
-
     const fetchChunk = useCallback(
         async (page: number) => {
             try {
@@ -94,8 +56,55 @@ export default function PBInfinite<T extends RecordModel>({
                 setLoading(false);
             }
         },
-        [page],
+        [collection, options, perPage],
     );
+
+    useEffect(() => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        globalEvents.on(topic as any, (event: GlobalEventsType["feed"]) => {
+            if (event.action === "create") {
+                setItems((items) => {
+                    const result = uniqBy(
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                        [event.record as any, ...items],
+                        "id",
+                    );
+                    return result;
+                });
+            } else if (event.action === "update") {
+                setItems((items) =>
+                    items.map((item) =>
+                        item.id === event.record.id
+                            ? (event.record as unknown as T)
+                            : item,
+                    ),
+                );
+            }
+        });
+    }, [topic]);
+
+    useEffect(() => {
+        if (
+            isEndInView &&
+            items.length > 0 &&
+            totalItems > items.length &&
+            page < totalPage &&
+            !isFirstMount
+        ) {
+            setPage((p) => {
+                fetchChunk(p + 1);
+                return p + 1;
+            });
+        }
+    }, [
+        fetchChunk,
+        isEndInView,
+        isFirstMount,
+        items,
+        page,
+        totalItems,
+        totalPage,
+    ]);
 
     useEffectOnce(() => {
         fetchChunk(page);

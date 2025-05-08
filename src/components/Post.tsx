@@ -74,6 +74,7 @@ export default function Post({
             }
         } catch (error) {
             toast.error("Action cannot be done, please try again later");
+            console.log(error);
         } finally {
             setLoading(false);
         }

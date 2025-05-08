@@ -3,7 +3,7 @@ import pb from "../lib/pb";
 import { RecordListOptions } from "pocketbase";
 import { CollectionRecords } from "../types/pocketbase-types";
 
-interface UseCollectionListOptions extends RecordListOptions {}
+type UseCollectionListOptions = RecordListOptions;
 
 export function useCollectionList(
     collectionName: string,

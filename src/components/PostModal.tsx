@@ -61,7 +61,7 @@ export default function PostModal({ ref }: PostModalProps) {
             setValue("body", post.body);
             ref.current?.showModal();
         };
-    }, []);
+    }, [ref, setValue]);
 
     const displayImagePreview: React.InputHTMLAttributes<HTMLInputElement>["onChange"] =
         (event) => {

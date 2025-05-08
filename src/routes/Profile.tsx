@@ -76,11 +76,11 @@ export default function Profile({ mode: initialMode }: ProfileProps) {
 
     useEffect(() => {
         fetchProfile();
-    }, []);
+    }, [fetchProfile]);
 
     useEffect(() => {
         fetchFollowRelationId(user?.id, profile?.id);
-    }, [user, profile]);
+    }, [user, profile, fetchFollowRelationId]);
 
     const toggleFollowing = async () => {
         if (!user || !profile) {

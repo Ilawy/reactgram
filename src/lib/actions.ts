@@ -15,7 +15,7 @@ export async function followUser(follower: string, following: string) {
             if (error instanceof ClientResponseError) {
                 if (
                     Object.values(error.data.data)
-                        .map((e: any) => e.code)
+                        .map((e: unknown) => (e as { code: string }).code)
                         .includes("validation_not_unique")
                 )
                     return Promise.reject(

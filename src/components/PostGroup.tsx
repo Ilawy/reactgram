@@ -7,7 +7,6 @@ import {
 import Post from "./Post";
 import pb from "../lib/pb";
 import { RecordModel } from "pocketbase";
-import _ from "lodash";
 import PostModal from "./PostModal";
 
 interface PostGroupProps {

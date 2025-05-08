@@ -40,7 +40,7 @@ export default function Search() {
                 result.map((item) => item.id) || [],
             ).then(setFollows);
         });
-    }, [term]);
+    }, [search, term, user?.id]);
 
     const [{ loading: followLoading }, invokeFollowUser] = useAsyncFn(
         (...args: Parameters<typeof followUser>) =>

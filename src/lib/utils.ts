@@ -1,4 +1,4 @@
-export function getUpdatedObject<T extends {}>(
+export function getUpdatedObject<T extends object>(
     original: Partial<T>,
     updated: Partial<T>,
 ): Partial<T> {
