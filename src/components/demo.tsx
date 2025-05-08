@@ -2,7 +2,7 @@ import { createContext, useContext, useState } from "react";
 
 const context = createContext({
     count: 0,
-    setCount: (_: any) => {},
+    setCount: (_x: number) => {},
 });
 
 function RedComponent() {

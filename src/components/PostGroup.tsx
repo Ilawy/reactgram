@@ -7,7 +7,6 @@ import {
 import Post from "./Post";
 import pb from "../lib/pb";
 import { RecordModel } from "pocketbase";
-import _ from "lodash";
 import PostModal from "./PostModal";
 
 interface PostGroupProps {
@@ -34,7 +33,7 @@ export default function PostGroup({
             (event) => {
                 if (event.action === "delete") {
                     setLikedPosts((likes) =>
-                        likes.filter((like) => like.id !== event.record.id),
+                        likes.filter((like) => like.id !== event.record.id)
                     );
                 } else if (event.action === "create") {
                     setLikedPosts((likes) => [...likes, event.record]);
@@ -43,7 +42,7 @@ export default function PostGroup({
             {
                 filter: `(${posts_filter})`,
                 fields: "post,id",
-            },
+            }
         );
 
         pb.collection("likes")

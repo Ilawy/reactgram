@@ -3,14 +3,14 @@ import pb from "../lib/pb";
 import { RecordListOptions } from "pocketbase";
 import { CollectionRecords } from "../types/pocketbase-types";
 
-interface UseCollectionListOptions extends RecordListOptions {}
+type UseCollectionListOptions = RecordListOptions;
 
 export function useCollectionList(
     collectionName: string,
-    { page, perPage, ...options }: UseCollectionListOptions,
+    { page, perPage, ...options }: UseCollectionListOptions
 ) {
     const result = useAsyncFn(() =>
-        pb.collection(collectionName).getList(page, perPage, options),
+        pb.collection(collectionName).getList(page, perPage, options)
     );
     return result;
 }
@@ -18,10 +18,10 @@ export function useCollectionList(
 export function useCollectionRecord(
     collectionName: keyof CollectionRecords,
     filter: string,
-    options?: RecordListOptions,
+    options?: RecordListOptions
 ) {
     const result = useAsyncFn(() =>
-        pb.collection(collectionName).getFirstListItem(filter, options),
+        pb.collection(collectionName).getFirstListItem(filter, options)
     );
 
     return result;

@@ -25,7 +25,7 @@ export default function Search() {
             pb
                 .collection("profiles")
                 .getList(1, 5, { filter: `name~'${search}'` })
-                .then((data) => data.items) as Promise<ProfilesResponse[]>,
+                .then((data) => data.items) as Promise<ProfilesResponse[]>
     );
     const { user } = useUser();
     useEffect(() => {
@@ -37,14 +37,14 @@ export default function Search() {
             }
             getFollowedUsers(
                 `${user?.id}`,
-                result.map((item) => item.id) || [],
+                result.map((item) => item.id) || []
             ).then(setFollows);
         });
-    }, [term]);
+    }, [search, term, user?.id]);
 
     const [{ loading: followLoading }, invokeFollowUser] = useAsyncFn(
         (...args: Parameters<typeof followUser>) =>
-            followUser(...args).catch(displayError),
+            followUser(...args).catch(displayError)
     );
 
     return (
@@ -81,7 +81,7 @@ export default function Search() {
                 {searchResult &&
                     searchResult.map((item) => {
                         const isFollowed = !!follows.find(
-                            (f) => f.followee === item.id,
+                            (f) => f.followee === item.id
                         );
                         return (
                             <li key={item.id} className="list-row">

@@ -36,9 +36,12 @@ export function LoginForm() {
     } = useForm<ILogin>();
     const [{ loading, error }, loginFn] = useAsyncFn(login);
     const navigate = useNavigate();
-    const onSubmit = useCallback((data: ILogin) => {
-        loginFn(data, navigate);
-    }, []);
+    const onSubmit = useCallback(
+        (data: ILogin) => {
+            loginFn(data, navigate);
+        },
+        [loginFn, navigate]
+    );
     return (
         <>
             <form

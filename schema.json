@@ -939,7 +939,7 @@
         "listRule": null,
         "viewRule": null,
         "createRule": "@request.auth.id = author.id",
-        "updateRule": null,
+        "updateRule": "@request.auth.id = author.id",
         "deleteRule": null,
         "name": "posts",
         "type": "base",
@@ -1008,6 +1008,85 @@
             },
             {
                 "hidden": false,
+                "id": "bool3844597223",
+                "name": "pinned",
+                "presentable": false,
+                "required": false,
+                "system": false,
+                "type": "bool"
+            },
+            {
+                "hidden": false,
+                "id": "autodate2990389176",
+                "name": "created",
+                "onCreate": true,
+                "onUpdate": false,
+                "presentable": false,
+                "system": false,
+                "type": "autodate"
+            },
+            {
+                "hidden": false,
+                "id": "autodate3332085495",
+                "name": "updated",
+                "onCreate": true,
+                "onUpdate": true,
+                "presentable": false,
+                "system": false,
+                "type": "autodate"
+            }
+        ],
+        "indexes": [],
+        "system": false
+    },
+    {
+        "id": "pbc_4285667772",
+        "listRule": null,
+        "viewRule": null,
+        "createRule": null,
+        "updateRule": null,
+        "deleteRule": null,
+        "name": "test",
+        "type": "base",
+        "fields": [
+            {
+                "autogeneratePattern": "[a-z0-9]{15}",
+                "hidden": false,
+                "id": "text3208210256",
+                "max": 15,
+                "min": 15,
+                "name": "id",
+                "pattern": "^[a-z0-9]+$",
+                "presentable": false,
+                "primaryKey": true,
+                "required": true,
+                "system": true,
+                "type": "text"
+            },
+            {
+                "cascadeDelete": false,
+                "collectionId": "_pb_users_auth_",
+                "hidden": false,
+                "id": "relation2375276105",
+                "maxSelect": 1,
+                "minSelect": 0,
+                "name": "user",
+                "presentable": false,
+                "required": false,
+                "system": false,
+                "type": "relation"
+            },
+            {
+                "hidden": false,
+                "id": "bool3844597223",
+                "name": "pinned",
+                "presentable": false,
+                "required": false,
+                "system": false,
+                "type": "bool"
+            },
+            {
+                "hidden": false,
                 "id": "autodate2990389176",
                 "name": "created",
                 "onCreate": true,
@@ -1056,7 +1135,7 @@
             },
             {
                 "hidden": false,
-                "id": "_clone_cyCf",
+                "id": "_clone_4quL",
                 "maxSelect": 1,
                 "maxSize": 0,
                 "mimeTypes": [
@@ -1082,7 +1161,7 @@
                 "cascadeDelete": false,
                 "collectionId": "_pb_users_auth_",
                 "hidden": false,
-                "id": "_clone_Txqe",
+                "id": "_clone_MZQc",
                 "maxSelect": 1,
                 "minSelect": 0,
                 "name": "author",
@@ -1094,7 +1173,7 @@
             {
                 "convertURLs": false,
                 "hidden": false,
-                "id": "_clone_xssA",
+                "id": "_clone_KqKz",
                 "maxSize": 0,
                 "name": "body",
                 "presentable": false,
@@ -1104,7 +1183,7 @@
             },
             {
                 "hidden": false,
-                "id": "_clone_lWyV",
+                "id": "_clone_xb4v",
                 "name": "created",
                 "onCreate": true,
                 "onUpdate": false,
@@ -1114,13 +1193,22 @@
             },
             {
                 "hidden": false,
-                "id": "_clone_hF8Z",
+                "id": "_clone_JCNT",
                 "name": "updated",
                 "onCreate": true,
                 "onUpdate": true,
                 "presentable": false,
                 "system": false,
                 "type": "autodate"
+            },
+            {
+                "hidden": false,
+                "id": "_clone_2WoZ",
+                "name": "pinned",
+                "presentable": false,
+                "required": false,
+                "system": false,
+                "type": "bool"
             },
             {
                 "hidden": false,
@@ -1135,7 +1223,7 @@
         ],
         "indexes": [],
         "system": false,
-        "viewQuery": "select id, image, author, body, created, updated, \n(SELECT count(id) from likes where posts.id = likes.post) as likes\nfrom posts "
+        "viewQuery": "select id, image, author, body, created, updated, pinned,\n(SELECT count(id) from likes where posts.id = likes.post) as likes\nfrom posts "
     },
     {
         "id": "pbc_3592778167",

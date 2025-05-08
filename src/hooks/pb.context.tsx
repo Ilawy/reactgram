@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import { AuthRecord } from "pocketbase";
 import {
     createContext,
@@ -19,7 +20,7 @@ export const pbContext = createContext<{
 
 export function PBProvider({ children }: PropsWithChildren) {
     const [user, setUser] = useState<null | (AuthRecord & ProfilesRecord)>(
-        null,
+        null
     );
     const [loading, setLoading] = useState(false);
     useEffect(() => {

@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { useUser } from "../hooks/pb.context";
 import { globalEvents } from "../lib/events";
 import pb from "../lib/pb";
+import { PostsResponse } from "../types/pocketbase-types";
 
 interface IPost {
     body: string;
@@ -54,13 +55,13 @@ export default function PostModal({ ref }: PostModalProps) {
     useEffect(() => {
         if (!ref.current) return;
         //@ts-expect-error (TODO: find a better way to do this)
-        ref.current.edit = function (post: any) {
+        ref.current.edit = function (post: PostsResponse) {
             setMode("edit");
             setEditId(post.id);
             setValue("body", post.body);
             ref.current?.showModal();
         };
-    }, []);
+    }, [ref, setValue]);
 
     const displayImagePreview: React.InputHTMLAttributes<HTMLInputElement>["onChange"] =
         (event) => {
@@ -105,7 +106,7 @@ export default function PostModal({ ref }: PostModalProps) {
         } catch (error) {
             if (error instanceof ClientResponseError && error.data.data) {
                 toast.error(
-                    <pre>{JSON.stringify(error.data.data, null, 2)}</pre>,
+                    <pre>{JSON.stringify(error.data.data, null, 2)}</pre>
                 );
             }
             toast.error((error as Error).message);
