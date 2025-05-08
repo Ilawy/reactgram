@@ -76,11 +76,11 @@ export default function Profile({ mode: initialMode }: ProfileProps) {
 
     useEffect(() => {
         fetchProfile();
-    }, []);
+    }, [fetchProfile]);
 
     useEffect(() => {
         fetchFollowRelationId(user?.id, profile?.id);
-    }, [user, profile]);
+    }, [user, profile, fetchFollowRelationId]);
 
     const toggleFollowing = async () => {
         if (!user || !profile) {
@@ -290,7 +290,7 @@ interface IChangableDetails {
     name: string;
 }
 
-function DetailsChanger({ user }: { user: AuthRecord & ProfilesRecord }) {
+function DetailsChanger({ user }: { user: NonNullable<AuthRecord> }) {
     const {
         register,
         handleSubmit,
@@ -342,7 +342,7 @@ function DetailsChanger({ user }: { user: AuthRecord & ProfilesRecord }) {
     );
 }
 
-function ImageChanger({ user }: { user: AuthRecord & ProfilesRecord }) {
+function ImageChanger({ user }: { user: NonNullable<AuthRecord> }) {
     const inputRef = useRef<HTMLInputElement>(null);
     function handleImageClick() {
         inputRef.current?.click();

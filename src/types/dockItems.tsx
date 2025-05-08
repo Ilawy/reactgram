@@ -1,4 +1,4 @@
-import { Compass, Search } from "lucide-react";
+import { Compass, MessageCircle, Search } from "lucide-react";
 
 export interface DockItemProps {
     icon: React.ReactNode;
@@ -19,6 +19,12 @@ export const dockItems: DockItemProps[] = [
         to: "/search",
         icon: <Search />,
         label: "Search",
+        scrollToTop: true,
+    },
+    {
+        to: "/chats",
+        icon: <MessageCircle />,
+        label: "Chats",
         scrollToTop: true,
     },
 

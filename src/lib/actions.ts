@@ -1,5 +1,9 @@
 import { toast } from "sonner";
-import { FollowsRecord } from "../types/pocketbase-types";
+import {
+    ChatsResponse,
+    FollowsRecord,
+    UsersResponse,
+} from "../types/pocketbase-types";
 import pb from "./pb";
 import { ClientResponseError } from "pocketbase";
 
@@ -15,7 +19,7 @@ export async function followUser(follower: string, following: string) {
             if (error instanceof ClientResponseError) {
                 if (
                     Object.values(error.data.data)
-                        .map((e: any) => e.code)
+                        .map((e: unknown) => (e as { code: string }).code)
                         .includes("validation_not_unique")
                 )
                     return Promise.reject(
@@ -49,4 +53,15 @@ export function displayError(error: unknown) {
     } else {
         toast.error(`${error}`);
     }
+}
+
+export function getChats() {
+    return pb.collection("chats").getFullList({
+        expand: "peer_a,peer_b",
+    }) as Promise<
+        ChatsResponse<{
+            peer_a: UsersResponse;
+            peer_b: UsersResponse;
+        }>[]
+    >;
 }

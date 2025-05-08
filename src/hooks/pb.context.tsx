@@ -9,8 +9,9 @@ import {
 import pb from "../lib/pb";
 import { ProfilesRecord } from "../types/pocketbase-types";
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const pbContext = createContext<{
-    user: null | (AuthRecord & ProfilesRecord);
+    user: null | AuthRecord;
     loading: boolean;
 }>({
     loading: true,
@@ -40,6 +41,7 @@ export function PBProvider({ children }: PropsWithChildren) {
     );
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useUser() {
     return useContext(pbContext);
 }

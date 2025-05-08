@@ -1,18 +1,13 @@
 import { useEffect, useRef, useState } from "react";
-import {
-    FeedResponse,
-    ProfilesRecord,
-    UsersRecord,
-} from "../types/pocketbase-types";
+import { FeedResponse, UsersRecord } from "../types/pocketbase-types";
 import Post from "./Post";
 import pb from "../lib/pb";
-import { RecordModel } from "pocketbase";
-import _ from "lodash";
+import { AuthRecord } from "pocketbase";
 import PostModal from "./PostModal";
 
 interface PostGroupProps {
     items: FeedResponse<number, { author: UsersRecord }>[];
-    user: (RecordModel & ProfilesRecord) | null;
+    user: AuthRecord;
     from: string;
     topic: string;
 }
