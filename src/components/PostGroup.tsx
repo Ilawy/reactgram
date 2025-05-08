@@ -14,7 +14,7 @@ interface PostGroupProps {
     user: (RecordModel & ProfilesRecord) | null;
     from: string;
     topic: string;
-    customActions: Parameters<typeof Post>[0]["customActions"];
+    customActions?: Parameters<typeof Post>[0]["customActions"];
 }
 export default function PostGroup({
     items,
