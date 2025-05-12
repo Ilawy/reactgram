@@ -126,3 +126,12 @@ export async function updateUserAvatar(
     }
     return await pb.collection("users").update(userId, formOrAvatar);
 }
+
+export async function listOAuthMethods() {
+    return pb
+        .collection("users")
+        .listAuthMethods()
+        .then((result) =>
+            result.oauth2.enabled ? result.oauth2.providers : [],
+        );
+}

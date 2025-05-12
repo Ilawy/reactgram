@@ -4,18 +4,11 @@ import pb from "../lib/pb";
 import { toast } from "sonner";
 import { useNavigate } from "react-router";
 import { useState } from "react";
+import { listOAuthMethods } from "../lib/actions";
 
 export default function OAuthOptions() {
-    const { loading, value, error } = useAsync<
-        () => Promise<AuthProviderInfo[]>
-    >(() =>
-        pb
-            .collection("users")
-            .listAuthMethods()
-            .then((result) =>
-                result.oauth2.enabled ? result.oauth2.providers : [],
-            ),
-    );
+    const { loading, value, error } =
+        useAsync<() => Promise<AuthProviderInfo[]>>(listOAuthMethods);
     const navigate = useNavigate();
     const [authLoading, setAuthLoading] = useState(false);
     const returnPath =
