@@ -31,30 +31,20 @@ import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import { getUpdatedObject } from "../lib/utils";
 import { pick } from "lodash";
-import { displayError, togglePostPin } from "../lib/actions";
+import {
+    displayError,
+    followUser,
+    getFollowRelationId,
+    getProfile,
+    togglePostPin,
+    unfollow,
+    updateUser,
+    updateUserAvatar,
+} from "../lib/actions";
 import { globalEvents } from "../lib/events";
 
 interface ProfileProps {
     mode: "self" | "user";
-}
-
-async function unfollow(id: string) {
-    return pb.collection("follows").delete(id);
-}
-
-async function getFollowRelationId(
-    follower: string | undefined,
-    following: string | undefined,
-) {
-    return pb
-        .collection("follows")
-        .getFirstListItem(`follower='${follower}' && followee='${following}'`)
-        .catch((e) =>
-            e instanceof ClientResponseError && e.status === 404
-                ? null
-                : Promise.reject(e),
-        )
-        .then((v) => v?.id);
 }
 
 export default function Profile({ mode: initialMode }: ProfileProps) {
@@ -65,10 +55,7 @@ export default function Profile({ mode: initialMode }: ProfileProps) {
     const id = mode === "self" ? user!.id : params.id!;
     const from = mode === "self" ? "/profile" : `/u/${id}`;
     const [{ loading: profileLoading, value: profile, error }, fetchProfile] =
-        useAsyncFn(
-            () => pb.collection("profiles").getOne<ProfilesRecord>(id),
-            [user],
-        );
+        useAsyncFn(() => getProfile(id), [user]);
 
     const [{ loading: unfollowLoading }, doUnfollow] = useAsyncFn(unfollow);
 
@@ -95,10 +82,7 @@ export default function Profile({ mode: initialMode }: ProfileProps) {
             await fetchFollowRelationId(user?.id, profile?.id);
             await fetchProfile();
         } else {
-            await pb.collection("follows").create({
-                followee: profile!.id,
-                follower: user.id,
-            });
+            await followUser(user.id, profile!.id);
             await fetchFollowRelationId(user?.id, profile?.id);
             await fetchProfile();
         }
@@ -335,8 +319,7 @@ function DetailsChanger({ user }: { user: AuthRecord & ProfilesRecord }) {
         formState: { errors },
     } = useForm<IChangableDetails>();
     const [{ loading }, updateDetails] = useAsyncFn(
-        (data: Partial<IChangableDetails>) =>
-            pb.collection("users").update(user.id, data),
+        (data: Partial<IChangableDetails>) => updateUser(user.id, data),
     );
 
     async function submit(data: IChangableDetails) {
@@ -395,7 +378,7 @@ function ImageChanger({ user }: { user: AuthRecord & ProfilesRecord }) {
                 if (!image) return;
                 const form = new FormData();
                 form.set("avatar", image);
-                await pb.collection("users").update(user.id, form);
+                updateUserAvatar(user.id, form);
                 toast.success("Image updated successfully");
             }
         } catch (error) {

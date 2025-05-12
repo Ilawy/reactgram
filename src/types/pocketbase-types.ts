@@ -11,6 +11,8 @@ export enum Collections {
     Mfas = "_mfas",
     Otps = "_otps",
     Superusers = "_superusers",
+    Chats = "chats",
+    Exchange = "exchange",
     Feed = "feed",
     Follows = "follows",
     Likes = "likes",
@@ -96,6 +98,28 @@ export type SuperusersRecord = {
     verified?: boolean;
 };
 
+export type ChatsRecord = {
+    created?: IsoDateString;
+    id: string;
+    peer_a: RecordIdString;
+    peer_b: RecordIdString;
+    updated?: IsoDateString;
+};
+
+export enum ExchangeTypeOptions {
+    "key_request" = "key_request",
+    "key_create" = "key_create",
+}
+export type ExchangeRecord<Tvalue = unknown> = {
+    created?: IsoDateString;
+    from?: RecordIdString;
+    id: string;
+    to: RecordIdString;
+    type?: ExchangeTypeOptions;
+    updated?: IsoDateString;
+    value?: null | Tvalue;
+};
+
 export type FeedRecord<Tlikes = unknown> = {
     author: RecordIdString;
     body?: HTMLString;
@@ -175,6 +199,12 @@ export type OtpsResponse<Texpand = unknown> = Required<OtpsRecord> &
     BaseSystemFields<Texpand>;
 export type SuperusersResponse<Texpand = unknown> = Required<SuperusersRecord> &
     AuthSystemFields<Texpand>;
+export type ChatsResponse<Texpand = unknown> = Required<ChatsRecord> &
+    BaseSystemFields<Texpand>;
+export type ExchangeResponse<Tvalue = unknown, Texpand = unknown> = Required<
+    ExchangeRecord<Tvalue>
+> &
+    BaseSystemFields<Texpand>;
 export type FeedResponse<Tlikes = unknown, Texpand = unknown> = Required<
     FeedRecord<Tlikes>
 > &
@@ -203,6 +233,8 @@ export type CollectionRecords = {
     _mfas: MfasRecord;
     _otps: OtpsRecord;
     _superusers: SuperusersRecord;
+    chats: ChatsRecord;
+    exchange: ExchangeRecord;
     feed: FeedRecord;
     follows: FollowsRecord;
     likes: LikesRecord;
@@ -218,6 +250,8 @@ export type CollectionResponses = {
     _mfas: MfasResponse;
     _otps: OtpsResponse;
     _superusers: SuperusersResponse;
+    chats: ChatsResponse;
+    exchange: ExchangeResponse;
     feed: FeedResponse;
     follows: FollowsResponse;
     likes: LikesResponse;
@@ -238,6 +272,8 @@ export type TypedPocketBase = PocketBase & {
     collection(idOrName: "_mfas"): RecordService<MfasResponse>;
     collection(idOrName: "_otps"): RecordService<OtpsResponse>;
     collection(idOrName: "_superusers"): RecordService<SuperusersResponse>;
+    collection(idOrName: "chats"): RecordService<ChatsResponse>;
+    collection(idOrName: "exchange"): RecordService<ExchangeResponse>;
     collection(idOrName: "feed"): RecordService<FeedResponse>;
     collection(idOrName: "follows"): RecordService<FollowsResponse>;
     collection(idOrName: "likes"): RecordService<LikesResponse>;

@@ -1,5 +1,9 @@
 import { toast } from "sonner";
-import { FollowsRecord } from "../types/pocketbase-types";
+import {
+    FollowsRecord,
+    ProfilesRecord,
+    UsersRecord,
+} from "../types/pocketbase-types";
 import pb from "./pb";
 import { ClientResponseError } from "pocketbase";
 
@@ -55,4 +59,70 @@ export async function togglePostPin(postId: string, oldPin: boolean) {
     return await pb
         .collection("posts")
         .update(postId, { pinned: !oldPin }, { expand: "author" });
+}
+
+export async function unlike(relId: string) {
+    return pb.collection("likes").delete(relId);
+}
+
+export async function like(userId: string, postId: string) {
+    return pb.collection("likes").create({
+        post: postId,
+        user: userId,
+    });
+}
+
+export function createNewPost(form: FormData) {
+    return pb.collection("posts").create(form, {
+        expand: "author",
+    });
+}
+
+export function updatePost(id: string, form: FormData) {
+    return pb.collection("posts").update(id, form, {
+        expand: "author",
+    });
+}
+
+export async function unfollow(id: string) {
+    return pb.collection("follows").delete(id);
+}
+
+export async function getFollowRelationId(
+    follower: string | undefined,
+    following: string | undefined,
+) {
+    return pb
+        .collection("follows")
+        .getFirstListItem(`follower='${follower}' && followee='${following}'`)
+        .catch((e) =>
+            e instanceof ClientResponseError && e.status === 404
+                ? null
+                : Promise.reject(e),
+        )
+        .then((v) => v?.id);
+}
+
+export async function getProfile(id: string) {
+    return pb.collection("profiles").getOne<ProfilesRecord>(id);
+}
+
+export async function updateUser(
+    userId: string,
+    data: Omit<Partial<UsersRecord>, "id">,
+) {
+    pb.collection("users").update(userId, data);
+}
+
+export async function updateUserAvatar(
+    userId: string,
+    formOrAvatar: File | FormData,
+    fieldName = "avatar",
+) {
+    if (formOrAvatar instanceof File) {
+        const file = formOrAvatar;
+        formOrAvatar = new FormData();
+        formOrAvatar.set(fieldName, file);
+    }
+    return await pb.collection("users").update(userId, formOrAvatar);
 }

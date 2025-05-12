@@ -12,6 +12,7 @@ import likeFalseSrc from "../assets/like-false.png";
 import likeTrueSrc from "../assets/like-true.png";
 import dotsSrc from "../assets/dots.png";
 import { AuthRecord } from "pocketbase";
+import { like, unlike } from "../lib/actions";
 
 interface PostProps {
     post: FeedResponse<number, { author: UsersRecord }>;
@@ -64,13 +65,10 @@ export default function Post({
         try {
             setLoading(true);
             if (liked) {
-                pb.collection("likes").delete(liked);
+                unlike(liked);
                 setLikesCount((l) => (l || 1) - 1);
             } else {
-                pb.collection("likes").create({
-                    post: post.id,
-                    user: user.id,
-                });
+                like(user.id, post.id);
                 setLikesCount((l) => (l || 0) + 1);
                 animate(likeIconRef.current!, {
                     filter: ["blur(1px)", "blur(3px)", "blur(0px)"],

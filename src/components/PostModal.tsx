@@ -8,6 +8,7 @@ import { useUser } from "../hooks/pb.context";
 import { globalEvents } from "../lib/events";
 import pb from "../lib/pb";
 import { PostsResponse } from "../types/pocketbase-types";
+import { createNewPost, updatePost } from "../lib/actions";
 
 interface IPost {
     body: string;
@@ -17,18 +18,6 @@ interface IPost {
 export interface PostModalProps {
     ref: React.RefObject<HTMLDialogElement | null>;
     // insertNewPost(post: PostsResponse): void | Promise<void>
-}
-
-function createNewPost(form: FormData) {
-    return pb.collection("posts").create(form, {
-        expand: "author",
-    });
-}
-
-function updatePost(id: string, form: FormData) {
-    return pb.collection("posts").update(id, form, {
-        expand: "author",
-    });
 }
 
 export default function PostModal({ ref }: PostModalProps) {
